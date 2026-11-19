@@ -792,7 +792,7 @@ const escapeHtml=(s)=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;',
 const deviceDisplayName=(name)=>String(name||'').replace(/^Jeetoo(?=\s)/i,'JEETOO');
 const label=()=>'<span class="ai-label">AI</span>';
 const homeText=()=>({
- zh:{files:'录音文件',latest:'最新录音优先',earliest:'最早录音优先',search:'搜索录音标题',close:'取消搜索',openMenu:'打开菜单',closeMenu:'关闭菜单',menuLabel:'JEETOO 菜单',profile:'个人资料',card:'我的工卡',language:'语言',about:'关于 JEETOO',logout:'退出登录',logoutConfirm:'确认退出当前演示账号？',cancel:'取消',confirmLogout:'确认退出',brand:'JEETOO',sort:'排序方式'},
+ zh:{files:'录音文件',latest:'最新录音优先',earliest:'最早录音优先',search:'搜索录音标题',close:'取消搜索',openMenu:'打开菜单',closeMenu:'关闭菜单',menuLabel:'JEETOO 菜单',profile:'个人资料',card:'工卡',language:'语言',about:'关于',logout:'退出登录',logoutConfirm:'确认退出当前演示账号？',cancel:'取消',confirmLogout:'确认退出',brand:'JEETOO',sort:'排序方式'},
  en:{files:'Recordings',latest:'Newest first',earliest:'Oldest first',search:'Search recordings',close:'Cancel search',openMenu:'Open menu',closeMenu:'Close menu',menuLabel:'JEETOO menu',profile:'Profile',card:'My card',language:'Language',about:'About JEETOO',logout:'Log out',logoutConfirm:'Log out of this demo account?',cancel:'Cancel',confirmLogout:'Log out',brand:'JEETOO',sort:'Sort by'},
  ja:{files:'録音ファイル',latest:'新しい順',earliest:'古い順',search:'録音を検索',close:'検索を閉じる',openMenu:'メニューを開く',closeMenu:'メニューを閉じる',menuLabel:'JEETOO メニュー',profile:'プロフィール',card:'マイカード',language:'言語',about:'JEETOOについて',logout:'ログアウト',logoutConfirm:'デモアカウントからログアウトしますか？',cancel:'キャンセル',confirmLogout:'ログアウト',brand:'JEETOO',sort:'並べ替え'}
 })[state.profile.language==='English'?'en':state.profile.language==='日本語'?'ja':'zh'];
