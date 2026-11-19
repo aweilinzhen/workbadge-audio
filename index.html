@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/><meta name="theme-color" content="#f5f6fa"/><title>Jeetoo AI Card · 文件首页（独立演示）</title>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/><meta name="theme-color" content="#f5f6fa"/><title>JEETOO AI Card · 文件首页（独立演示）</title>
 <style>
 :root {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
@@ -27,12 +27,17 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
     radial-gradient(ellipse 65% 55% at 36% 0%, rgba(248,249,252,.95), transparent 95%),
     linear-gradient(160deg, #f5f6fa 0%, #f9faff 67%, #f5f6fa 100%);
 }
-/* The main page includes bottom-nav padding and can be taller than the viewport.
-   Lock the shell only while the fullscreen conversation is open so its fixed
-   bottom controls use the actual screen edge as their containing boundary. */
+/* Lock the shell while the fullscreen conversation is open so fixed controls
+   use the actual screen edge as their containing boundary. */
 .app-shell:has(.ai-mode-fullscreen) {height:100dvh;min-height:100dvh;max-height:100dvh;}
 .app-shell:has(.ai-history-page) {background:#F4F4F5;}
 .app-shell:has(.ai-history-page) > .status-bar {background:#F4F4F5;}
+.app-shell:has(.home-toolbar) {background:#F7F7F9;}
+.main-content:has(.home-toolbar) {padding-left:20px;padding-right:20px;}
+.main-content:has(.files-section) {height:calc(100dvh - 56px);min-height:0;overflow:visible;padding-bottom:0;}
+.main-content:has(.files-section) .files-section {height:calc(100% - 59px);display:flex;flex-direction:column;overflow:visible;}
+.main-content:has(.files-section) .file-list {flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding-bottom:130px;scrollbar-width:none;}
+.main-content:has(.files-section) .file-list::-webkit-scrollbar {display:none;}
 .status-bar {
   height: 56px;
   padding: 10px 31px 0 38px;
@@ -81,17 +86,90 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
 .device-row-status .row-chevron {color:inherit;flex:none;}
 .device-menu-add {height:56px;min-height:56px;width:100%;display:flex;align-items:center;gap:12px;padding:0;border:0;border-top:1px solid #EEEEEE;background:none;font-size:16px;font-weight:550;text-align:left;color:#333333;}
 .device-menu-row:active {opacity:.57;}
-.files-section {margin-top:16px;}
-.files-heading {display:flex; align-items:center; gap:9px; margin-bottom:6px;}
-.files-heading h1 {font-size:29px; letter-spacing:-1.15px; font-weight:780; margin:0; line-height:1.33;}
+.home-toolbar {display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;}
+.home-toolbar-leading,.home-toolbar-actions {display:flex;align-items:center;gap:10px;min-width:0;}
+.home-icon-button {width:44px;height:44px;flex:none;display:grid;place-items:center;border:0;border-radius:50%;background:#EAEAEC;color:#171717;padding:0;}
+.home-icon-button svg {width:21px;height:21px;}
+.device-chip {height:44px;max-width:190px;min-width:0;flex:0 1 auto;padding:0 12px;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;background:#EAEAEC;color:#171717;font-size:14px;font-weight:620;white-space:nowrap;}
+.device-chip > span:nth-child(2) {min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;}
+.device-chip .device-online-dot {width:8px;height:8px;border-radius:50%;background:#39A76B;flex:none;}
+.device-chip > svg {flex:none;}
+.home-search-form {height:44px;display:flex;align-items:center;gap:7px;padding:0 7px 0 13px;border-radius:999px;background:#EAEAEC;min-width:0;flex:1;}
+.home-search-form svg {flex:none;color:#55585f;}
+.home-search-form input {width:100%;min-width:0;border:0;outline:0;background:transparent;color:#171717;font-size:14px;}
+.home-search-form input::placeholder {color:#9297A1;}
+.home-search-form button {width:32px;height:32px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#656870;}
+.files-heading {display:flex;align-items:center;gap:5px;margin:16px 0 8px;}
+.files-heading h1 {font-size:29px;letter-spacing:-1.15px;font-weight:780;margin:0;line-height:1.25;}
 .sort-wrap {position:relative;}
-.sort-button {width:31px; height:34px; display:grid; place-items:center; background:transparent; color:#050609; border:0; padding:0;}
-.sort-popover {position:absolute; top:42px; left:-17px; z-index:5; background:white; border-radius:15px; width:196px; padding:9px 9px 11px; box-shadow:0 12px 35px #191d2a30; animation: fade-in .15s ease-out;}
-.sort-caption {font-size:11px; color:#a0a3af; margin:5px 10px 4px;}
-.sort-popover button {width:100%; border:0; background:none; padding:10px; display:flex; align-items:center; justify-content:space-between; font-size:13px; text-align:left; border-radius:8px;}
-.sort-popover button:hover {background:#f4f5f8;}
+.sort-heading-button {display:flex;align-items:center;gap:3px;padding:3px 1px;border:0;background:transparent;color:#171717;text-align:left;}
+.sort-heading-button svg {width:18px;height:18px;}
+.sort-popover {position:absolute;top:37px;left:-3px;z-index:30;background:white;border-radius:14px;width:205px;padding:7px;box-shadow:0 8px 25px rgba(0,0,0,.12);}
+.sort-popover button {width:100%;border:0;background:none;padding:11px 10px;display:flex;align-items:center;justify-content:space-between;font-size:14px;text-align:left;border-radius:9px;color:#171717;}
+.sort-popover button:hover {background:#f4f4f5;}
+.side-menu-root {position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.42);animation:fade-in .18s ease-out;}
+.app-shell.drawer-open .main-content {overflow:hidden;}
+body.drawer-open {position:fixed;top:var(--drawer-scroll-offset,0px);left:0;right:0;width:100%;overflow:hidden;}
+.side-drawer {position:absolute;inset:0 auto 0 0;width:min(82vw,390px);display:flex;flex-direction:column;padding:calc(16px + env(safe-area-inset-top)) 20px calc(12px + env(safe-area-inset-bottom));background:#fff;color:#171717;box-shadow:8px 0 26px rgba(0,0,0,.08);animation:drawer-slide-in .25s ease-out;}
+.side-menu-root.closing .side-drawer {animation:drawer-slide-out .22s ease-in forwards;}
+.side-menu-root.closing {animation:fade-out .22s ease-in forwards;}
+.side-drawer-brand {height:44px;display:flex;align-items:center;justify-content:space-between;font-size:22px;font-weight:730;letter-spacing:-.6px;}
+.side-drawer-close {width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:50%;background:#F2F2F3;color:#333;}
+.side-profile {display:flex;align-items:center;gap:14px;width:100%;padding:22px 0 24px;margin-top:8px;border:0;border-bottom:1px solid #EEEEEE;background:transparent;text-align:left;color:inherit;}
+.side-profile .profile-avatar {width:58px;height:58px;}
+.side-profile .profile-card-copy {gap:4px;}
+.side-profile .profile-card-copy strong {font-size:17px;}
+.side-profile .profile-card-copy>span {font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.side-profile .row-chevron {color:#9297A1;flex:none;}
+.side-menu-items {display:flex;flex-direction:column;padding-top:9px;}
+.side-menu-item {height:56px;min-height:56px;width:100%;display:flex;align-items:center;gap:14px;padding:0;border:0;border-bottom:1px solid #EEEEEE;background:transparent;color:#171717;text-align:left;font-size:16px;font-weight:540;}
+.side-menu-item > svg:first-child {width:21px;height:21px;color:#555960;flex:none;}
+.side-menu-item > span {flex:1;min-width:0;}
+.side-menu-item > small {color:#9297A1;font-size:13px;white-space:nowrap;}
+.side-menu-item .row-chevron {color:#A2A5AC;flex:none;}
+.side-menu-footer {margin-top:auto;padding-top:9px;border-top:1px solid #EEEEEE;}
+.side-logout {height:56px;width:100%;display:flex;align-items:center;gap:14px;padding:0;border:0;background:transparent;color:#9297A1;text-align:left;font-size:15px;font-weight:520;}
+.side-logout svg {width:21px;height:21px;}
+.side-dialog-backdrop {position:absolute;inset:0;z-index:2;display:grid;place-items:center;padding:24px;background:rgba(0,0,0,.32);}
+.side-dialog {width:min(100%,340px);border-radius:20px;background:#fff;padding:22px;box-shadow:0 14px 40px rgba(0,0,0,.16);}
+.side-dialog h2 {margin:0 0 12px;font-size:19px;}
+.side-dialog p {margin:0 0 20px;color:#666a72;font-size:15px;line-height:1.55;}
+.side-dialog-actions {display:flex;justify-content:flex-end;gap:10px;}
+.side-dialog-actions button {height:42px;min-width:85px;padding:0 15px;border:0;border-radius:12px;background:#F0F0F1;color:#333;font-size:14px;font-weight:600;}
+.side-dialog-actions .primary {background:#171717;color:white;}
+.side-language-list {display:grid;gap:7px;}
+.side-language-list button {height:46px;padding:0 12px;display:flex;justify-content:space-between;align-items:center;border:0;border-radius:11px;background:#F5F5F6;color:#171717;text-align:left;}
+.side-menu-root .sheet-root {z-index:3;}
+@keyframes drawer-slide-in {from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes drawer-slide-out {from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@keyframes fade-out {to{opacity:0}}
+.files-section {margin-top:8px;}
+.files-heading {display:flex;align-items:center;gap:5px;margin:4px 0 8px;}
+.files-heading h1 {font-size:29px;letter-spacing:-1.15px;font-weight:780;margin:0;line-height:1.25;}
+.sort-wrap {position:relative;}
+.sort-popover {position:absolute;top:37px;left:-3px;z-index:30;background:white;border-radius:14px;width:205px;padding:7px;box-shadow:0 8px 25px rgba(0,0,0,.12);}
+.sort-popover button {width:100%;border:0;background:none;padding:11px 10px;display:flex;align-items:center;justify-content:space-between;font-size:14px;text-align:left;border-radius:9px;color:#171717;}
+.sort-popover button:hover {background:#f4f4f5;}
 .popover-divider {height:1px; background:#f0f1f4; margin:5px 3px;}
 .file-list {display:flex; flex-direction:column; gap:8px;}
+.recording-day-group {display:flex;flex-direction:column;gap:7px;}
+.recording-day-group[hidden] {display:none!important;}
+.recording-day-title {margin:10px 2px 0;color:#858891;font-size:14px;font-weight:600;line-height:20px;text-align:left;}
+.recording-day-list {overflow:hidden;padding:0 16px;border-radius:18px;background:#FFFFFF;}
+.recording-day-list .file-card {min-height:72px;padding:13px 2px;border-radius:0;background:transparent;box-shadow:none;}
+.recording-day-list .file-card + .file-card {border-top:1px solid #EEEEEE;}
+.recording-day-list .file-card:hover {box-shadow:none;}
+.recording-day-list .file-title {display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;}
+.recording-transfer-summary {width:100%;margin:0 0 2px;padding:20px 21px 17px;border-radius:22px;background:rgba(255,255,255,.97);box-shadow:0 10px 28px rgba(29,33,45,.07);}
+.recording-transfer-title {display:flex;align-items:center;gap:12px;font-size:20px;font-weight:700;letter-spacing:-.4px;line-height:1.25;}
+.recording-transfer-title svg {width:30px;height:30px;flex:none;}
+.recording-transfer-progress {height:7px;margin:20px 0 16px;border-radius:99px;background:#e9e9eb;overflow:hidden;}
+.recording-transfer-progress i {display:block;width:62%;height:100%;border-radius:inherit;background:#252527;}
+.recording-transfer-footer {display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.recording-transfer-speed {color:#85868b;font-size:19px;white-space:nowrap;}
+.quick-transfer-button {min-height:43px;padding:0 17px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #dedee1;border-radius:999px;background:#fff;color:#111;font-size:17px;font-weight:650;white-space:nowrap;}
+.quick-transfer-button svg {width:23px;height:23px;}
+.quick-transfer-button:active {background:#f4f4f5;}
 .file-card {width:100%; min-height:73px; display:block; border:0; border-radius:17px; background:rgba(255,255,255,.96); box-shadow:none; padding:12px 21px 13px; text-align:left; color:#08090a; transition:transform .15s ease,box-shadow .15s ease;}
 .file-card:hover {box-shadow:0 4px 18px #3030410c;}
 .file-card:active {transform:scale(.991);}
@@ -109,10 +187,15 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
 .meta-divider {width:1.2px; background:#a1a4af; height:15px; display:inline-block; margin:0 1px;}
 .ai-label {border:1.3px solid #9b9eac; border-radius:4px; font-size:10px; font-weight:650; line-height:15px; height:16px; padding:0 3px; display:inline-flex; align-items:center; justify-content:center; color:#9296a5; margin-left:2px; vertical-align:middle;}
 .empty-note {text-align:center; color:#9395a2; font-size:14px; margin-top:35px;}
-.bottom-nav {position:absolute; left:0; right:0; bottom:calc(26px + env(safe-area-inset-bottom)); height:82px; background:rgba(255,255,255,.92); border-top:1px solid rgba(216,218,227,.5); border-radius:15px 15px 0 0; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); display:flex; justify-content:space-around; align-items:flex-start; padding:9px 10px 0; z-index:10;}
-.nav-item {width:33.33%; height:67px; display:flex; flex-direction:column; align-items:center; gap:3px; background:transparent; border:0; color:#777982; font-size:13px; line-height:19px; font-weight:580;}
-.nav-item svg {height:33px; width:33px;}
-.nav-item.active {color:#0a0a0c; font-weight:680;}
+.home-ai-entry {position:fixed;z-index:30;left:50%;bottom:calc(38px + env(safe-area-inset-bottom,0px));width:calc(100% - 32px);max-width:438px;height:64px;transform:translateX(-50%);}
+.home-ai-entry.ai-input-capsule {height:60px;gap:9px;padding:5px 7px 5px 18px;border-color:#EEEEF1;box-shadow:0 5px 16px rgba(35,39,52,.11);}
+.home-ai-entry.ai-input-capsule input {padding:0 6px;}
+.home-ai-entry.ai-input-capsule .ai-voice-button,.home-ai-entry.ai-input-capsule .ai-send-button {width:44px;height:44px;border-radius:50%;}
+.home-ai-entry.ai-input-capsule .ai-voice-button {background:#F4F5F7;color:#333333;}
+.home-ai-entry .ai-send-button {background:#17181A;color:#FFFFFF;}
+.home-ai-entry [hidden] {display:none!important;}
+.app-shell.ai-keyboard-open .home-ai-entry {bottom:calc(var(--ai-keyboard-inset,0px) + 12px);}
+.ai-input-capsule:has(input:focus-visible) {box-shadow:0 7px 24px rgba(28,30,38,.13),0 0 0 2px rgba(23,23,23,.08);}
 .home-area {position:absolute; width:100%; height:calc(26px + env(safe-area-inset-bottom)); bottom:0; left:0; z-index:11; background:transparent; display:flex; justify-content:center; align-items:flex-end; padding-bottom:max(8px,env(safe-area-inset-bottom));}
 .home-indicator {width:35%; max-width:146px; height:5px; border-radius:99px; background:#030406;}
 .secondary-page {padding-top:13px;}
@@ -126,7 +209,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
 .chat-form button {border:0; border-radius:12px; background:#111318; color:white; padding:7px 15px; font-size:14px;}
 .chat-form button:disabled {background:#b4b7c1;}
 .ai-launcher-input {cursor:pointer;}
-.ai-panel-root {position:absolute;inset:0;z-index:100;display:flex;align-items:flex-end;background:rgba(24,25,28,.28);padding-bottom:var(--ai-keyboard-inset,0px);animation:fade-in .18s ease-out;}
+.ai-panel-root {position:fixed;inset:0;z-index:10000;display:flex;align-items:flex-end;background:rgba(24,25,28,.28);padding-bottom:var(--ai-keyboard-inset,0px);animation:fade-in .18s ease-out;}
 .ai-panel {width:100%;height:calc(var(--ai-visual-height, 100dvh) - 56px);min-height:420px;display:flex;flex-direction:column;overflow:hidden;border-radius:28px 28px 0 0;background:linear-gradient(180deg,#FFFFFF 0%,#FCFCFC 100%);box-shadow:0 -8px 32px rgba(20,22,28,.12);animation:ai-panel-up .28s cubic-bezier(.2,.8,.2,1);}
 .ai-panel-grabber {width:44px;height:5px;flex:none;margin:11px auto 13px;border-radius:99px;background:#D3D3D6;touch-action:none;}
 .ai-panel-header {height:68px;flex:none;display:grid;grid-template-columns:46px 1fr 46px;align-items:center;padding:0 19px;}
@@ -152,11 +235,13 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
 .ai-input-capsule {height:59px;display:flex;align-items:center;gap:10px;padding:6px 7px 6px 12px;border:1px solid #F0F0F1;border-radius:99px;background:#FFFFFF;box-shadow:0 5px 18px rgba(29,32,39,.10);}
 .ai-input-capsule button {width:40px;height:40px;flex:none;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#17181A;}
 .ai-input-capsule button svg {width:26px;height:26px;}
+.ai-input-capsule .ai-send-button {background:#17181A;color:#FFFFFF;}
+.ai-input-capsule [hidden] {display:none!important;}
 .ai-input-capsule input {height:100%;min-width:0;flex:1;border:0;outline:0;padding:0 8px;background:transparent;color:#333333;font-size:16px;}
 .ai-input-capsule input::placeholder {color:#9B9DA4;}
 .ai-voice-active {background:#E6E6E7!important;}
 .ai-disclaimer {margin:11px 0 0;text-align:center;color:#A0A1A7;font-size:12px;line-height:18px;}
-.ai-panel-root {position:absolute;inset:0 0 var(--ai-keyboard-inset,0px);z-index:200;justify-content:center;padding-bottom:0;}
+.ai-panel-root {position:fixed;inset:0 0 var(--ai-keyboard-inset,0px);left:50%;right:auto;width:min(100vw,470px);z-index:10000;transform:translateX(-50%);justify-content:center;padding-bottom:0;}
 .ai-panel {height:calc(100% - max(30px, env(safe-area-inset-top)));min-height:min(420px, calc(100% - max(30px, env(safe-area-inset-top))));}
 .ai-panel-root.ai-panel-expanded {align-items:stretch;padding:0;background:#FFFFFF;}
 .ai-panel-root.ai-panel-expanded .ai-panel {height:100%;min-height:0;border-radius:0;box-shadow:none;}
@@ -434,6 +519,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
 .detail-note {border:1px solid #f0f1f4; border-radius:15px; padding:16px; font-size:14px;}
 .detail-note strong {font-size:14px; margin-left:7px;}.detail-note p {font-size:13px; line-height:1.6; color:#8f929d; margin:9px 0 0;}
 .recording-screen {position:absolute; inset:56px 0 0; display:flex; flex-direction:column; padding:0 12px max(18px,env(safe-area-inset-bottom)); background:linear-gradient(160deg,#f7f8fb 0%,#fff 54%,#f5f6fa 100%); z-index:5;}
+.app-shell.ai-keyboard-open .recording-screen {bottom:var(--ai-keyboard-inset,0px);}
 .app-shell.recording-open .status-bar,.app-shell.recording-open .home-area {z-index:40;}
 .recording-topbar {height:62px; display:grid; grid-template-columns:40px minmax(0,1fr) 32px; align-items:center; gap:4px; flex-shrink:0;}
 .recording-topbar button {border:0; background:transparent; display:grid; place-items:center; height:40px; color:#111318; padding:0;}
@@ -444,6 +530,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
 .recording-tabs button.active::after {content:''; position:absolute; left:28%; right:28%; bottom:0; height:3px; border-radius:4px; background:#111318;}
 .recording-body {min-height:0; overflow:auto; flex:1; padding:14px 0 18px; scrollbar-width:none;}
 .recording-body::-webkit-scrollbar {display:none;}
+.recording-body:has(.attachments-content) {padding-bottom:calc(48px + env(safe-area-inset-bottom));}
 .transcript-player {display:flex; align-items:center; gap:11px; border-radius:22px; background:#fff; box-shadow:0 7px 20px #25283712; padding:14px 13px; margin:0 0 18px; min-height:76px;}
 .transcript-player .play-button {width:44px;height:44px;}
 .transcript-clock {white-space:nowrap; font-size:13px; color:#17191d;}
@@ -470,27 +557,46 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
 .followup-row {display:flex; gap:8px; overflow-x:auto; padding:7px 2px 12px; flex-shrink:0; scrollbar-width:none;}
 .followup-row button {height:43px; white-space:nowrap; border:0; border-radius:99px; background:#fff; box-shadow:0 5px 13px #22253613; padding:0 14px; font-size:13px; font-weight:570; color:#15171b;}
 .followup-row button span {margin-left:7px;}
-.recording-composer {height:60px; display:flex; align-items:center; gap:9px; padding:5px 7px 5px 18px; border:1px solid #EEEEF1; border-radius:99px; background:#FFFFFF; box-shadow:0 5px 16px rgba(35,39,52,.11); flex-shrink:0;}
-.recording-composer button {border:0; background:transparent; color:#333333; display:grid; place-items:center; flex-shrink:0; padding:0;}
-.recording-composer .composer-input {min-width:0; flex:1; height:100%; border:0; padding:4px 6px; outline:none; font-size:15px; background:transparent;}
-.recording-composer .composer-input::placeholder {color:#a0a2aa;}
-.recording-composer [data-action="voice-toggle"] {width:44px;height:44px;border-radius:50%;background:#F4F5F7;}
-.recording-composer [data-action="voice-toggle"] svg {width:26px;height:26px;}
-.recording-composer [data-action="voice-toggle"].voice-active {background:#E5E5E5;color:#333333;}
+.recording-composer.ai-input-capsule {height:60px;display:flex;gap:9px;padding:5px 7px 5px 18px;flex-shrink:0;border-color:#EEEEF1;box-shadow:0 5px 16px rgba(35,39,52,.11);}
+.recording-composer.ai-input-capsule input {padding:0 6px;}
+.recording-composer.ai-input-capsule .ai-voice-button {width:44px;height:44px;border-radius:50%;background:#F4F5F7;color:#333333;}
+.recording-composer.ai-input-capsule .ai-voice-button svg {width:26px;height:26px;}
+.recording-composer.ai-input-capsule .ai-send-button {width:44px;height:44px;border-radius:50%;}
+.app-shell.ai-keyboard-open .recording-composer.ai-input-capsule {height:56px;}
 .attachment-button {width:100%; border:0; background:#141517; color:#fff; min-height:51px; border-radius:14px; display:flex; align-items:center; justify-content:center; gap:12px; font-size:17px; font-weight:640; margin-bottom:12px;}
-.attachment-card {background:#fff; border:1px solid #f0f0f2; border-radius:20px; padding:16px; margin-bottom:12px; box-shadow:0 5px 16px #20243408;}
-.attachment-heading {display:flex; align-items:flex-start; gap:8px; margin-bottom:14px;}
-.attachment-heading>div {flex:1;}.attachment-heading strong {display:block; font-size:19px; margin-bottom:4px;}.attachment-heading p {margin:0; font-size:13px; color:#777a84;}
-.attachment-heading button {border:0; background:none; padding:4px;}
+.attachments-content {display:flex;flex-direction:column;gap:27px;padding:3px 2px 8px;}
+.attachment-module {min-width:0;}
+.attachment-module-head {display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px;}
+.attachment-module-title {margin:0;color:#1e1f22;font-size:17px;line-height:1.35;font-weight:650;}
+.attachment-module-title small {margin-left:5px;color:#9a9ca3;font-size:12px;font-weight:450;}
+.attachment-module-description {margin:3px 0 0;color:#92949b;font-size:12px;line-height:1.4;}
+.attachment-add {display:inline-flex;align-items:center;gap:4px;flex:none;padding:6px 1px;border:0;background:transparent;color:#292a2d;font-size:13px;font-weight:550;}
+.attachment-add svg {width:17px;height:17px;}
 .photo-grid {display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px;}
-.photo-add {aspect-ratio:1; border:1px dashed #c7c9ce; border-radius:13px; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; color:#777a84; font-size:12px;}
-.photo-thumb {aspect-ratio:1; border-radius:12px; overflow:hidden; background:linear-gradient(140deg,#e6e1d6,#b7c1cb 50%,#eee); position:relative; display:grid; place-items:center; color:#59616e;}
-.photo-thumb:nth-child(3n) {background:linear-gradient(145deg,#dad8d3,#777f89 48%,#d8dde4);}
-.photo-thumb:nth-child(4n) {background:linear-gradient(145deg,#d5c3a2,#886d49 50%,#e8dccc);}
-.photo-thumb span {font-size:10px; opacity:.82; font-weight:650; padding:4px 6px; background:#ffffffaa; border-radius:6px;}
-.note-input {width:100%; min-height:120px; resize:vertical; border:1px solid #dedfe4; border-radius:14px; padding:13px; font-size:14px; outline:none;}
-.note-input::placeholder {color:#a0a2aa;}
-.note-save {border:0; background:#151619; color:white; border-radius:12px; padding:9px 17px; margin-top:9px; float:right;}
+.photo-add-empty {width:100%;height:58px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed #d3d4d8;border-radius:13px;background:transparent;color:#777a84;font-size:13px;}
+.photo-thumb {aspect-ratio:1; width:100%; padding:0; border:0; border-radius:12px; overflow:hidden; background:#f0f1f3; position:relative; display:grid; place-items:center; color:#59616e; touch-action:pan-y;}
+.photo-thumb img {width:100%;height:100%;object-fit:cover;}
+.note-list {display:flex;flex-direction:column;}
+.note-row {position:relative;display:flex;align-items:flex-start;gap:8px;padding:12px 0;border-top:1px solid #ededf0;}
+.note-open {min-width:0;flex:1;padding:0;border:0;background:transparent;text-align:left;color:#26272b;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.65;}
+.note-open>span {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;}
+.note-open.expanded>span {-webkit-line-clamp:unset;}
+.note-meta {display:block;margin-top:5px;color:#999ca5;font-size:11px;line-height:1.4;}
+.note-more {width:31px;height:34px;flex:none;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#858891;}
+.note-menu-pop {position:absolute;right:30px;top:31px;z-index:4;width:132px;padding:5px;background:#fff;border:1px solid #eeeef0;border-radius:12px;box-shadow:0 8px 24px #1c1d2220;}
+.note-menu-pop button {width:100%;height:37px;padding:0 9px;border:0;border-radius:8px;background:#fff;text-align:left;color:#3d3e43;font-size:13px;}
+.note-menu-pop button+button {border-top:1px solid #f0f0f2;color:#c94b4b;}
+.attachment-empty {padding:9px 0;color:#a0a2aa;font-size:13px;}
+.note-edit-sheet {display:flex;flex-direction:column;max-height:82dvh;}
+.note-edit-form {display:flex;flex:1;min-height:0;flex-direction:column;}
+.note-editor-textarea {width:100%;min-height:170px;max-height:45dvh;flex:1;resize:none;border:1px solid #dedfe4;border-radius:14px;padding:13px;font-size:15px;line-height:1.55;outline:none;}
+.note-editor-textarea::placeholder {color:#a0a2aa;}
+.note-editor-footer {display:flex;gap:10px;padding-top:13px;flex:none;}
+.note-editor-footer button {height:46px;flex:1;border:0;border-radius:13px;background:#f0f1f4;color:#28292d;font-size:15px;font-weight:600;}
+.note-editor-footer button.primary {background:#151619;color:#fff;}
+.attachment-action-row {width:100%;height:54px;display:flex;align-items:center;gap:13px;border:0;border-top:1px solid #f0f0f2;background:#fff;color:#26272b;text-align:left;font-size:15px;}
+.attachment-action-row svg {color:#55575d;}
+.photo-preview-image {max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;}
 .note-count {font-size:12px; color:#999ca5; margin-left:7px;}
 .image-preview {position:absolute; z-index:45; inset:0; background:#101115e8; display:grid; place-items:center; padding:24px;}
 .image-preview-card {width:min(100%,370px); height:min(62vh,420px); border-radius:19px; background:linear-gradient(145deg,#ddd7c8,#a7b1bc 48%,#ebe7df); display:grid; place-items:center; color:#505761; position:relative;}
@@ -612,9 +718,11 @@ button:focus-visible, input:focus-visible { outline: 3px solid #969bad; outline-
 @media (max-width: 374px) { .file-title {font-size:16px;} .file-meta {gap:7px; font-size:12px;} .files-heading h1 {font-size:27px;} }
 @media (max-height: 650px) { .main-content {padding-bottom:104px;} }
 
-</style></head><body><div class="app-shell"><div class="status-bar"><div class="status-time">8:43 <span class="muted-symbol">⌁</span></div><div class="status-signals"><svg width="24" height="17" viewBox="0 0 24 17" fill="currentColor" aria-hidden="true"><rect x="1" y="10" width="4" height="6" rx="1.4"/><rect x="7" y="7" width="4" height="9" rx="1.4"/><rect x="13" y="3.8" width="4" height="12.2" rx="1.4"/><rect x="19" y=".5" width="4" height="15.5" rx="1.4" opacity=".25"/></svg><svg width="23" height="19" viewBox="0 0 23 19" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"><path d="M2 6c5.8-5.2 13.2-5.2 19 0M5.4 9.4c3.8-3.6 8.4-3.6 12.2 0M9 13c1.6-1.5 3.5-1.5 5 0"/><circle cx="11.5" cy="16.2" r="1.2" fill="currentColor" stroke="none"/></svg><div class="battery"><span></span></div></div></div><main class="main-content" id="content"></main><nav class="bottom-nav" id="bottom-nav" aria-label="底部导航"></nav><div class="home-area"><div class="home-indicator"></div></div><div id="modal"></div></div>
+</style></head><body><div class="app-shell"><div class="status-bar"><div class="status-time">8:43 <span class="muted-symbol">⌁</span></div><div class="status-signals"><svg width="24" height="17" viewBox="0 0 24 17" fill="currentColor" aria-hidden="true"><rect x="1" y="10" width="4" height="6" rx="1.4"/><rect x="7" y="7" width="4" height="9" rx="1.4"/><rect x="13" y="3.8" width="4" height="12.2" rx="1.4"/><rect x="19" y=".5" width="4" height="15.5" rx="1.4" opacity=".25"/></svg><svg width="23" height="19" viewBox="0 0 23 19" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"><path d="M2 6c5.8-5.2 13.2-5.2 19 0M5.4 9.4c3.8-3.6 8.4-3.6 12.2 0M9 13c1.6-1.5 3.5-1.5 5 0"/><circle cx="11.5" cy="16.2" r="1.2" fill="currentColor" stroke="none"/></svg><div class="battery"><span></span></div></div></div><main class="main-content" id="content"></main><div id="home-ai-entry"></div><div class="home-area"><div class="home-indicator"></div></div><div id="modal"></div></div><div id="ai-overlay-root"></div>
 <script>
 const icons = {
+  menuLines: '<path d="M4 7h16M4 17h10"/>',
+  search: '<circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/>',
   device: '<rect x="3.4" y="2.6" width="16.7" height="18.8" rx="2.6"/><path d="M14.7 2.7v18.5"/><circle cx="17.4" cy="6.5" r="1.05"/><circle cx="17.4" cy="10.2" r="1.05"/>',
   down: '<path d="m5 9 7 7 7-7"/>',
   right: '<path d="m9 5 7 7-7 7"/>',
@@ -640,6 +748,7 @@ const icons = {
   bluetooth: '<path d="m7 7 10 10-5 4V3l5 4L7 17"/>',
   wifi: '<path d="M3 8.5a13.2 13.2 0 0 1 18 0M6.5 12a8.1 8.1 0 0 1 11 0M10 15.5a3 3 0 0 1 4 0"/><circle cx="12" cy="19" r=".7" fill="currentColor" stroke="none"/>',
   signal: '<rect x="3" y="14" width="3" height="7" rx="1" fill="currentColor" stroke="none"/><rect x="8" y="10" width="3" height="11" rx="1" fill="currentColor" stroke="none"/><rect x="13" y="6" width="3" height="15" rx="1" fill="currentColor" stroke="none"/><rect x="18" y="2" width="3" height="19" rx="1" fill="currentColor" stroke="none"/>',
+  rocket: '<path d="M14 4c2.1-1.7 4.5-2.1 6-2 .1 1.5-.3 3.9-2 6l-5 5-4-4 5-5Z"/><circle cx="16.5" cy="5.5" r="1.2"/><path d="m9 9-4 .5-3 3 6 .5m5 1  .5 6 3-3 .5-4M7 17c-1.5.2-2.5 1.5-2.7 3.7C6.5 20.5 7.8 19.5 8 18"/>',
   shield: '<path d="M12 2 4 5v6c0 5 3 8.4 8 11 5-2.6 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M9.8 2.5h4.4l.6 2.3 1.8.8 2.1-1.2 3.1 3.1-1.2 2.1.8 1.8 2.1.6v4.4l-2.3.6-.8 1.8 1.2 2.1-3.1 3.1-2.1-1.2-1.8.8-.6 2.1H9.8l-.6-2.3-1.8-.8-2.1 1.2-3.1-3.1 1.2-2.1-.8-1.8-2.1-.6v-4.4l2.3-.6.8-1.8-1.2-2.1 3.1-3.1 2.1 1.2 1.8-.8.4-2.1Z" transform="translate(1 0) scale(.92)"/>'
   ,edit: '<path d="m14 5 5 5M3 21l4.3-.9L20 7.4 16.6 4 3.9 16.7 3 21Z"/><path d="M13 21h8"/>'
@@ -658,35 +767,67 @@ function icon(name, size=24, strokeWidth=1.9, extra='') {
   return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" class="${extra}" aria-hidden="true">${icons[name] || ''}</svg>`;
 }
 
+function formatRecordingTimestamp(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;}
+function formatRecordingDate(date){return `${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;}
+const firstRecordingCreatedAt=new Date();
 const FILES = [
- {id:1, title:'English Language Transcription and Summary Testing',date:'09-24 18:08',fullDate:'2026-09-24 18:08:00',duration:'00:00:13',ai:true},
+ {id:1, title:'English Language Transcription and Summary Testing',date:formatRecordingDate(firstRecordingCreatedAt),fullDate:formatRecordingTimestamp(firstRecordingCreatedAt),duration:'00:00:13',ai:true},
  {id:2, title:'录音产品设计简化与功能精简讨论',date:'09-24 18:06',fullDate:'2026-09-24 18:06:49',duration:'00:00:21',ai:true},
  {id:3, title:'2026-09-24 18:06:33',date:'09-24 18:06',fullDate:'2026-09-24 18:06:33',duration:'00:00:05',ai:false},
- {id:4, title:'2026-11-11 16:30:16',date:'11-11 16:30',fullDate:'2026-11-11 16:30:16',duration:'00:00:12',ai:false,transfer:{mode:'4g',progress:45}},
- {id:5, title:'2026-11-10 10:13:42',date:'11-10 10:13',fullDate:'2026-11-10 10:13:42',duration:'00:00:18',ai:false,transfer:{mode:'bluetooth',progress:32}},
- {id:6, title:'2026-11-10 10:13:09',date:'11-10 10:13',fullDate:'2026-11-10 10:13:09',duration:'00:00:09',ai:false,transfer:{mode:'wifi',progress:68}}
 ];
 const MOCK_TRANSCRIPT_SEGMENTS=[{time:'00:01',speaker:'说话人 01',text:'这周末天气好像不错，我想带家人去海边露营。需要准备帐篷、折叠椅、防潮垫，还有一些吃的喝的。最好周六上午出发，避开中午最热的时候。晚上可以在海边看看日落，第二天睡醒再慢慢回来。'},{time:'00:14',speaker:'说话人 01',text:'我们可以把核心的录音和智能问答保留下来，让操作更清晰，第一次使用也能很快上手。'}];
 const MOCK_RECORDING_SUMMARY={topic:'录音产品设计简化与功能精简，围绕录音和 AI 问答等核心场景，提升产品易用性。',conclusions:['聚焦录音、转写和智能问答等主要能力。','精简低频功能与复杂操作流程，降低使用门槛。','后续围绕核心场景继续优化交互体验。'],actions:['梳理现有功能并确定精简优先级。','进一步完善核心录音与 AI 交互流程。'],mindMap:'核心体验 → 录音记录 → 内容转写 → AI 总结与问答'};
 const transcriptFor=(file)=>file.transcriptSegments||MOCK_TRANSCRIPT_SEGMENTS;
 const summaryFor=(file)=>file.summary||MOCK_RECORDING_SUMMARY;
-const state = {tab:'files', device:'MMEETT Pro', deviceDetailName:null, devices:['MMEETT Pro','Jeetoo AI Card','Jeetoo AI Card 02'], batteryLevels:{'MMEETT Pro':100,'Jeetoo AI Card':86}, menu:false, sortOpen:false, sortMode:'newest', fileMenu:null, fileDialog:null, fileRenameId:null, fileRenameDraft:'', transferModalId:null, detail:null, recordingId:null, recordingActionsOpen:false, recordingDialog:null, recordingDraftTitle:'', detailTab:'transcript', deviceDetail:false, deviceReturnToProfile:false, accountPage:false, aboutPage:false, aboutDetail:null, aboutUpdateChecked:false, cardEditorOpen:false, accountDialog:null, account:{email:'aweilinzheng@gmail.com',passwordSet:false,loginMethod:'通过 Google 登录'}, deviceSettings:{nfc:true,sleep:'30 分钟',firmware:'2.0.0',battery:100,storage:'12/58 GB'}, profile:{name:'Sophia Chen',role:'产品经理',avatar:null,language:'简体中文',transcriptionLanguage:'中文',noiseReduction:true,notifications:false}, profileDialog:null, firmwareStage:'idle',firmwareProgress:0,deviceDialog:null, unbindMode:'disconnect', deviceConfirm:false, boundSuccess:false, recordingConfirm:null, addOpen:false, playing:false, playSeconds:0, playbackRate:1, voiceActive:false, aiPanelOpen:false, aiFullscreen:false, aiPanelExpanded:false, aiPanelChatMode:false, aiPanelLoading:false, aiPanelMessages:[], aiDraft:'', aiPanelHint:'', aiVoiceActive:false, aiMoreOpen:false, aiInsight:null, aiInsightLoading:false, aiInsightResult:null, noteDraft:'', notes:{}, photos:{}, previewPhoto:null, toast:'', outlineCollapsed:false, messages:[{role:'user',text:'你好你好你好你好你好你好你好。'},{role:'assistant',text:'你好呀，连着说了好几遍，是在测试输入，还是现在心情特别好？\n\n我看到你选中的录音了，这段内容比较短。我可以帮你整理重点、提取待办，也可以直接聊其他事情。'}]};
+const state = {tab:'files', device:'JEETOO Pro', deviceDetailName:null, devices:['JEETOO Pro','JEETOO AI Card','JEETOO AI Card 02'], batteryLevels:{'JEETOO Pro':100,'JEETOO AI Card':86}, menu:false, sidebarOpen:false, sidebarClosing:false, sidebarScrollTop:0, sidebarWindowScrollY:0, restoreSidebarScroll:false, resetWindowScroll:false, restoreWindowScroll:false, searchOpen:false, searchQuery:'', sortOpen:false, sortMode:'newest', fileMenu:null, fileDialog:null, fileRenameId:null, fileRenameDraft:'', transferModalId:null, detail:null, recordingId:null, recordingActionsOpen:false, recordingDialog:null, recordingDraftTitle:'', detailTab:'transcript', deviceDetail:false, deviceReturnToProfile:false, accountPage:false, aboutPage:false, aboutDetail:null, aboutUpdateChecked:false, cardEditorOpen:false, accountDialog:null, account:{email:'aweilinzheng@gmail.com',passwordSet:false,loginMethod:'通过 Google 登录'}, deviceSettings:{nfc:true,sleep:'30 分钟',firmware:'2.0.0',battery:100,storage:'12/58 GB'}, profile:{name:'Sophia Chen',role:'产品经理',avatar:null,language:'简体中文',transcriptionLanguage:'中文',noiseReduction:true,notifications:false}, profileDialog:null, firmwareStage:'idle',firmwareProgress:0,deviceDialog:null, unbindMode:'disconnect', deviceConfirm:false, boundSuccess:false, recordingConfirm:null, addOpen:false, playing:false, playSeconds:0, playbackRate:1, voiceActive:false, aiPanelOpen:false, aiFullscreen:false, aiPanelExpanded:false, aiPanelChatMode:false, aiPanelLoading:false, aiPanelMessages:[], aiDraft:'', aiPanelHint:'', aiVoiceActive:false, aiContext:{scope:'all',recordingId:null}, aiMoreOpen:false, aiInsight:null, aiInsightLoading:false, aiInsightResult:null, noteEditorOpen:false, noteEditingId:null, noteDraft:'', noteMenuId:null, noteDeleteId:null, notes:{}, photos:{}, photoActionId:null, photoDeleteId:null, previewPhoto:null, toast:'', outlineCollapsed:false, messages:[{role:'user',text:'你好你好你好你好你好你好你好。'},{role:'assistant',text:'你好呀，连着说了好几遍，是在测试输入，还是现在心情特别好？\n\n我看到你选中的录音了，这段内容比较短。我可以帮你整理重点、提取待办，也可以直接聊其他事情。'}]};
 let aiHistoryOpen=false, aiHistoryDetail=null, aiHistoryNotice='', aiHistoryReturnScrollTop=0, aiPanelFromNav=false;
 let aiHistoryRecords=[{id:'share',title:'分享你的快乐',summary:'这条笔记里就一句「这是想法」，别的没写。不过你说「…',dialogue:['这是想法','这条笔记里就一句「这是想法」，别的没写。不过你说起来时很开心，要不要多讲讲当时想到的事情？']},{id:'today',title:'今天想聊点啥',summary:'你好呀，我在。今天想聊点什么？',dialogue:['你好呀，我在。今天想聊点什么？','我想聊聊这周末的安排。']}];
 let aiHistoryMenuId=null, aiHistoryDialog=null, aiHistoryEditingId=null, aiHistorySearchOpen=false;
-let playbackTimer=null, toastTimer=null, firmwareTimer=null, aiPressTimer=null, aiPressTriggered=false, aiDragStart=null, aiInsightTimer=null, aiPanelTimer=null;
+let playbackTimer=null, toastTimer=null, firmwareTimer=null, aiPressTimer=null, aiPressTriggered=false, aiDragStart=null, aiInsightTimer=null, aiPanelTimer=null, sidebarCloseTimer=null;
 let fileLongPressTimer=null,fileLongPressTarget=null,fileLongPressOrigin=null,fileLongPressTriggered=false,fileLongPressSuppressClick=false;
+let photoLongPressTimer=null,photoLongPressId=null,photoLongPressStart=null,photoLongPressTriggered=false,photoLongPressSuppressClick=false;
+function openSidebar(){clearTimeout(sidebarCloseTimer);state.sidebarClosing=false;state.sidebarOpen=true;state.restoreSidebarScroll=false;state.sidebarScrollTop=document.getElementById('content')?.scrollTop||0;state.sidebarWindowScrollY=window.scrollY||document.documentElement.scrollTop||0;state.menu=false;state.sortOpen=false;render();}
+function closeSidebarAnimated(){if(!state.sidebarOpen||state.sidebarClosing)return;state.sidebarClosing=true;renderModal();clearTimeout(sidebarCloseTimer);sidebarCloseTimer=window.setTimeout(()=>{state.sidebarOpen=false;state.sidebarClosing=false;state.profileDialog=null;state.restoreWindowScroll=true;render();},230);}
 const escapeHtml=(s)=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+const deviceDisplayName=(name)=>String(name||'').replace(/^Jeetoo(?=\s)/i,'JEETOO');
 const label=()=>'<span class="ai-label">AI</span>';
+const homeText=()=>({
+ zh:{files:'录音文件',latest:'最新录音优先',earliest:'最早录音优先',search:'搜索录音标题',close:'取消搜索',openMenu:'打开菜单',closeMenu:'关闭菜单',menuLabel:'JEETOO 菜单',profile:'个人资料',card:'我的工卡',language:'语言',about:'关于 JEETOO',logout:'退出登录',logoutConfirm:'确认退出当前演示账号？',cancel:'取消',confirmLogout:'确认退出',brand:'JEETOO',sort:'排序方式'},
+ en:{files:'Recordings',latest:'Newest first',earliest:'Oldest first',search:'Search recordings',close:'Cancel search',openMenu:'Open menu',closeMenu:'Close menu',menuLabel:'JEETOO menu',profile:'Profile',card:'My card',language:'Language',about:'About JEETOO',logout:'Log out',logoutConfirm:'Log out of this demo account?',cancel:'Cancel',confirmLogout:'Log out',brand:'JEETOO',sort:'Sort by'},
+ ja:{files:'録音ファイル',latest:'新しい順',earliest:'古い順',search:'録音を検索',close:'検索を閉じる',openMenu:'メニューを開く',closeMenu:'メニューを閉じる',menuLabel:'JEETOO メニュー',profile:'プロフィール',card:'マイカード',language:'言語',about:'JEETOOについて',logout:'ログアウト',logoutConfirm:'デモアカウントからログアウトしますか？',cancel:'キャンセル',confirmLogout:'ログアウト',brand:'JEETOO',sort:'並べ替え'}
+})[state.profile.language==='English'?'en':state.profile.language==='日本語'?'ja':'zh'];
+function groupRecordingsByDate(records,now=new Date()){
+ const groups=new Map();
+ for(const file of records){
+  const date=new Date(String(file.fullDate||'').replace(' ','T'));
+  if(Number.isNaN(date.getTime()))continue;
+  const key=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+  if(!groups.has(key))groups.set(key,{key,date,files:[]});
+  groups.get(key).files.push(file);
+ }
+ const todayOrdinal=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000;
+ return [...groups.values()].map(group=>{
+  const ordinal=Date.UTC(group.date.getFullYear(),group.date.getMonth(),group.date.getDate())/86400000,offset=todayOrdinal-ordinal;
+  return {...group,heading:offset===0?'今天':offset===1?'昨天':`${group.date.getMonth()+1}月${group.date.getDate()}日`};
+ });
+}
 function filesView(){
- const data = FILES.filter(file=>!file.transfer).sort((a,b)=>state.sortMode==='newest'?b.fullDate.localeCompare(a.fullDate):a.fullDate.localeCompare(b.fullDate));
+ const t=homeText(),query=state.searchQuery.trim().toLocaleLowerCase();
+ const data = FILES.filter(file=>!file.transfer&&(!query||file.title.toLocaleLowerCase().includes(query))).sort((a,b)=>state.sortMode==='newest'?b.fullDate.localeCompare(a.fullDate):a.fullDate.localeCompare(b.fullDate));
+ const groupedCards=groupRecordingsByDate(data).map(group=>{
+  const rows=group.files.map(f=>`<button class="file-card" data-search-title="${escapeHtml(f.title.toLocaleLowerCase())}" data-action="open-file" data-file-record="${f.id}" data-value="${f.id}" aria-label="打开文件：${escapeHtml(f.title)}"><div class="file-title">${escapeHtml(f.title)}</div><div class="file-meta"><span>${f.date}</span><span class="meta-divider"></span><span>${f.duration}</span>${f.ai?label():''}</div></button>`).join('');
+  return `<section class="recording-day-group" data-recording-day="${group.key}"><h2 class="recording-day-title">${group.heading}</h2><div class="recording-day-list">${rows}</div></section>`;
+ }).join('');
  const transferring = FILES.filter(file=>file.transfer).sort((a,b)=>b.fullDate.localeCompare(a.fullDate));
- const serials={'MMEETT Pro':'GET26FCF3D2B','Jeetoo AI Card':'TJ225IVPYSQ2','Jeetoo AI Card 02':'GET26AA83D44'};
- const menu = state.menu ? `<div class="device-menu" role="listbox" aria-label="设备列表">${state.devices.map(d=>{const selected=d===state.device, battery=state.batteryLevels[d];return `<button class="device-menu-row ${selected?'current':'offline'}" data-action="select-device" data-value="${escapeHtml(d)}" aria-current="${selected}"><span class="device-row-icon">${icon('device',36,1.7)}</span><span class="device-row-copy"><strong>${escapeHtml(d)}</strong><small>SN: ${serials[d]||'GET26A000000'}</small></span><span class="device-row-status">${selected&&Number.isFinite(battery)?`<span class="battery-level"><svg class="battery-icon" width="17" height="12" viewBox="0 0 20 12" fill="none" aria-hidden="true"><rect x="1" y="1" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M19 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="3" y="3" width="12" height="6" rx="1" fill="currentColor"/></svg>${battery}%</span>`:''}${selected?icon('check',19,2,'selected-mark'):icon('right',22,2,'row-chevron')}</span></button>`}).join('')}<button class="device-menu-add" data-action="open-add">${icon('plus',29,2)}<span>添加设备</span></button></div>` : '';
- const sort = state.sortOpen ? `<div class="sort-popover"><div class="sort-caption">排序方式</div><button data-action="sort-newest">时间从近到远 ${state.sortMode==='newest'?icon('check',17):''}</button><button data-action="sort-oldest">时间从远到近 ${state.sortMode==='oldest'?icon('check',17):''}</button></div>` : '';
- const cards = data.map(f=>`<button class="file-card" data-action="open-file" data-file-record="${f.id}" data-value="${f.id}" aria-label="打开文件：${escapeHtml(f.title)}"><div class="file-title">${escapeHtml(f.title)}</div><div class="file-meta"><span>${f.date}</span><span class="meta-divider"></span><span>${f.duration}</span>${f.ai?label():''}</div></button>`).join('');
+ const serials={'JEETOO Pro':'GET26FCF3D2B','JEETOO AI Card':'TJ225IVPYSQ2','JEETOO AI Card 02':'GET26AA83D44'};
+ const menu = state.menu ? `<div class="device-menu" role="listbox" aria-label="设备列表">${state.devices.map(d=>{const selected=d===state.device, battery=state.batteryLevels[d];return `<button class="device-menu-row ${selected?'current':'offline'}" data-action="select-device" data-value="${escapeHtml(d)}" aria-current="${selected}"><span class="device-row-icon">${icon('device',36,1.7)}</span><span class="device-row-copy"><strong>${escapeHtml(deviceDisplayName(d))}</strong><small>SN: ${serials[d]||'GET26A000000'}</small></span><span class="device-row-status">${selected&&Number.isFinite(battery)?`<span class="battery-level"><svg class="battery-icon" width="17" height="12" viewBox="0 0 20 12" fill="none" aria-hidden="true"><rect x="1" y="1" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M19 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="3" y="3" width="12" height="6" rx="1" fill="currentColor"/></svg>${battery}%</span>`:''}${selected?icon('check',19,2,'selected-mark'):icon('right',22,2,'row-chevron')}</span></button>`}).join('')}<button class="device-menu-add" data-action="open-add">${icon('plus',29,2)}<span>添加设备</span></button></div>` : '';
+ const sort = state.sortOpen ? `<div class="sort-popover"><button data-action="sort-newest"><span>${t.latest}</span>${state.sortMode==='newest'?icon('check',17):''}</button><button data-action="sort-oldest"><span>${t.earliest}</span>${state.sortMode==='oldest'?icon('check',17):''}</button></div>` : '';
+ const cards=groupedCards;
  const transferCards=transferring.map(transferFileCard).join('');
- return `<header class="device-section"><button class="current-device" data-action="menu" aria-expanded="${state.menu}">${icon('device',24,1.45)}<span>${escapeHtml(state.device)}</span>${icon('down',21,2.5,state.menu?'chevron-open':'')}</button>${menu}</header><section class="files-section"><div class="files-heading"><h1>全部文件</h1><div class="sort-wrap"><button class="sort-button" data-action="sort" aria-label="文件排序和筛选">${icon('sort',23,2.4)}</button>${sort}</div></div><div class="file-list">${cards}${transferCards||(!cards?'<p class="empty-note">暂无符合条件的文件</p>':'')}</div></section>${fileListActionView()}`;
+ const activeTransferSummary=`<section class="recording-transfer-summary" aria-label="录音传输进度"><div class="recording-transfer-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 18 6l2 2M4 16l2 2a7 7 0 0 0 12.4-3"/></svg><span>正在传输录音（1/1）</span></div><div class="recording-transfer-progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"><i></i></div><div class="recording-transfer-footer"><span class="recording-transfer-speed">0.00 KB/s</span><button class="quick-transfer-button" data-action="quick-transfer">${icon('rocket',24,1.8)}<span>快速传输</span></button></div></section>`;
+ const toolbar=state.searchOpen?`<div class="home-toolbar"><div class="home-toolbar-leading"><button class="home-icon-button" data-action="sidebar-open" aria-label="${t.openMenu}">${icon('menuLines',22,2)}</button></div><form class="home-search-form" data-action="search-submit" role="search">${icon('search',20,2)}<input id="home-search-input" type="search" value="${escapeHtml(state.searchQuery)}" placeholder="${t.search}" autocomplete="off"><button type="button" data-action="search-close" aria-label="${t.close}">${icon('close',18,2)}</button></form></div>`:`<div class="home-toolbar"><div class="home-toolbar-leading"><button class="home-icon-button" data-action="sidebar-open" aria-label="${t.openMenu}">${icon('menuLines',22,2)}</button></div><div class="home-toolbar-actions"><button class="home-icon-button" data-action="search-open" aria-label="${t.search}">${icon('search',21,2)}</button><button class="device-chip" data-action="menu" aria-expanded="${state.menu}">${icon('device',20,1.7)}<span>${escapeHtml(deviceDisplayName(state.device))}</span><i class="device-online-dot" aria-label="${state.profile.language==='English'?'Connected':state.profile.language==='日本語'?'接続済み':'已连接'}"></i>${icon('down',16,2,state.menu?'chevron-open':'')}</button></div></div>`;
+ const emptyCopy=query?(state.profile.language==='English'?'No matching recordings':state.profile.language==='日本語'?'一致する録音はありません':'没有找到匹配的录音'):(state.profile.language==='English'?'No recordings':state.profile.language==='日本語'?'録音はありません':'暂无录音文件');
+ return `<header class="device-section">${toolbar}${state.searchOpen?'':menu}</header><section class="files-section"><div class="files-heading"><div class="sort-wrap"><h1><button class="sort-heading-button" data-action="sort" aria-expanded="${state.sortOpen}"><span>${t.files}</span>${icon('down',17,2.1)}</button></h1>${sort}</div></div><div class="file-list">${activeTransferSummary}${cards}${transferCards||(!cards?`<p class="empty-note" id="file-search-empty">${emptyCopy}</p>`:'')}</div></section>${fileListActionView()}`;
 }
 const transferModes={
  '4g':{label:'4G',status:'4G 上传中',speed:'128 KB/s',glyph:'signal',description:'通过移动网络上传云端。'},
@@ -695,7 +836,7 @@ const transferModes={
 };
 function transferFileCard(file){
  const transfer=file.transfer,mode=transferModes[transfer.mode]||transferModes.wifi;
- return `<article class="transfer-card"><div class="transfer-card-head"><button class="transfer-card-title" data-action="open-file" data-value="${file.id}" data-file-record="${file.id}">${escapeHtml(file.title)}</button><button class="transfer-mode-chip" data-action="transfer-open" data-value="${file.id}" aria-label="切换 ${mode.label} 传输方式">${mode.label}</button></div><div class="transfer-card-state"><span>${mode.status} ${transfer.progress}%</span><span class="transfer-speed">${mode.glyph==='bluetooth'?icon('bluetooth',14,2):mode.glyph==='wifi'?icon('wifi',14,2):''}${mode.speed}</span></div><div class="transfer-progress" role="progressbar" aria-valuenow="${transfer.progress}" aria-valuemin="0" aria-valuemax="100"><i style="width:${transfer.progress}%"></i></div></article>`;
+ return `<article class="transfer-card" data-search-title="${escapeHtml(file.title.toLocaleLowerCase())}"><div class="transfer-card-head"><button class="transfer-card-title" data-action="open-file" data-value="${file.id}" data-file-record="${file.id}">${escapeHtml(file.title)}</button><button class="transfer-mode-chip" data-action="transfer-open" data-value="${file.id}" aria-label="切换 ${mode.label} 传输方式">${mode.label}</button></div><div class="transfer-card-state"><span>${mode.status} ${transfer.progress}%</span><span class="transfer-speed">${mode.glyph==='bluetooth'?icon('bluetooth',14,2):mode.glyph==='wifi'?icon('wifi',14,2):''}${mode.speed}</span></div><div class="transfer-progress" role="progressbar" aria-valuenow="${transfer.progress}" aria-valuemin="0" aria-valuemax="100"><i style="width:${transfer.progress}%"></i></div></article>`;
 }
 function transferModeView(){
  const file=FILES.find(item=>item.id===state.transferModalId);if(!file?.transfer)return '';
@@ -718,7 +859,7 @@ function assistantView(){
  const prompts=aiQuickPrompts.map(prompt=>`<button class="ai-prompt-card" type="button" data-action="ai-quick-prompt" data-value="${escapeHtml(prompt)}"><span>${escapeHtml(prompt)}</span>${icon('right',21,2)}</button>`).join('');
  const messages=state.aiPanelMessages.map(message=>`<div class="ai-panel-message ${message.role}">${escapeHtml(message.text)}</div>`).join('');
  const body=state.aiPanelChatMode?`<div class="ai-panel-conversation" id="ai-panel-conversation">${messages}${state.aiPanelLoading?`<div class="ai-panel-loading" role="status" aria-live="polite"><i class="ai-insight-spinner" aria-hidden="true"></i><span>小步正在思考…</span></div>`:''}</div>`:`<div class="assistant-ai-prompts">${prompts}</div><div class="assistant-ai-spacer"></div>`;
- return `<section class="assistant-ai-screen" aria-label="MMEETT AI"><header class="assistant-ai-header"><span aria-hidden="true"></span><h1>MMEETT AI</h1><button class="assistant-ai-right-button" type="button" data-action="ai-history-open" aria-label="历史对话">${icon('more',22,2.2)}</button></header>${body}<div class="assistant-ai-bottom">${aiComposerMarkup()}</div></section>`;
+ return `<section class="assistant-ai-screen" aria-label="JEETOO AI"><header class="assistant-ai-header"><span aria-hidden="true"></span><h1>JEETOO AI</h1><button class="assistant-ai-right-button" type="button" data-action="ai-history-open" aria-label="历史对话">${icon('more',22,2.2)}</button></header>${body}<div class="assistant-ai-bottom">${aiComposerMarkup({variant:'assistant'})}</div></section>`;
 }
 function aiHistoryView(){
  const inlineClass=state.tab==='assistant'&&!state.aiPanelOpen?' ai-history-inline':'';
@@ -729,7 +870,7 @@ function aiHistoryView(){
  }
  const rows=aiHistoryRecords.map(record=>`<div class="ai-history-item"><div class="ai-history-row"><button class="ai-history-record" data-action="ai-history-record" data-value="${escapeHtml(record.id)}"><strong>${escapeHtml(record.title)}</strong><small>${escapeHtml(record.summary)}</small></button><button class="ai-history-more" data-action="ai-history-more" data-value="${escapeHtml(record.id)}" aria-label="${escapeHtml(record.title)}的更多操作">${icon('more',18,2.2)}</button></div>${aiHistoryMenuId===record.id?`<div class="ai-history-menu" role="menu"><button data-action="ai-history-rename" data-value="${escapeHtml(record.id)}" role="menuitem">重命名</button><button data-action="ai-history-delete" data-value="${escapeHtml(record.id)}" role="menuitem">删除</button></div>`:''}</div>`).join('');
  const dialog=aiHistoryDialog?`<div class="ai-history-overlay" data-action="ai-history-dialog-backdrop"><section class="ai-history-dialog" role="dialog" aria-modal="true"><h2>${aiHistoryDialog==='rename'?'重命名':'删除对话'}</h2>${aiHistoryDialog==='rename'?`<form id="ai-history-rename-form"><input name="title" value="${escapeHtml(aiHistoryRecords.find(item=>item.id===aiHistoryEditingId)?.title||'')}" maxlength="40" aria-label="对话名称" required><div class="ai-history-dialog-actions"><button type="button" data-action="ai-history-dialog-cancel">取消</button><button class="primary" type="submit">保存</button></div></form>`:`<p>确定删除这条对话吗？</p><div class="ai-history-dialog-actions"><button data-action="ai-history-dialog-cancel">取消</button><button class="primary" data-action="ai-history-delete-confirm">删除</button></div>`}</section></div>`:'';
- return `<section class="ai-history-page${inlineClass}" aria-label="Jeetoo AI 首页"><header class="ai-history-topbar"><button class="ai-history-back" data-action="ai-history-back" aria-label="返回 MMEETT AI">${icon('back',23,2)}</button><h1>Jeetoo</h1></header><div class="ai-history-body"><div class="ai-history-heading"><strong>历史对话</strong><button class="ai-history-search" data-action="ai-history-search">AI搜索记录</button></div><p class="ai-history-day">今天</p><div class="ai-history-list">${rows||'<p class="ai-history-empty">暂无历史对话</p>'}</div></div><button class="ai-history-new" data-action="ai-history-new">${icon('newChat',22,1.8)}<span>新建对话</span></button><div class="ai-history-home-indicator"></div>${dialog}</section>`;
+ return `<section class="ai-history-page${inlineClass}" aria-label="JEETOO AI 首页"><header class="ai-history-topbar"><button class="ai-history-back" data-action="ai-history-back" aria-label="返回 JEETOO AI">${icon('back',23,2)}</button><h1>JEETOO</h1></header><div class="ai-history-body"><div class="ai-history-heading"><strong>历史对话</strong><button class="ai-history-search" data-action="ai-history-search">AI搜索记录</button></div><p class="ai-history-day">今天</p><div class="ai-history-list">${rows||'<p class="ai-history-empty">暂无历史对话</p>'}</div></div><button class="ai-history-new" data-action="ai-history-new">${icon('newChat',22,1.8)}<span>新建对话</span></button><div class="ai-history-home-indicator"></div>${dialog}</section>`;
 }
 function aiPanelView(){
  if(!state.aiPanelOpen)return '';
@@ -739,9 +880,32 @@ function aiPanelView(){
  const body=state.aiPanelChatMode?`<div class="ai-panel-conversation" id="ai-panel-conversation">${chat}${state.aiPanelLoading?`<div class="ai-panel-loading" role="status" aria-live="polite"><i class="ai-insight-spinner" aria-hidden="true"></i><span>小步正在思考…</span></div>`:''}</div>`:`<div class="ai-panel-prompts">${prompts}</div><div class="ai-panel-spacer"></div>`;
  const expandLabel=state.aiPanelExpanded?'收起':'展开';
  const rightAction=state.aiPanelExpanded?`<button class="ai-panel-icon-button" type="button" data-action="ai-history-open" aria-label="历史对话">${icon('more',22,2.2)}</button>`:`<button class="ai-panel-icon-button" type="button" data-action="ai-expand" aria-label="${expandLabel}">${icon('expand',21,1.9,'ai-panel-expand-icon')}</button>`;
- return `<div class="ai-panel-root ${state.aiPanelExpanded?'ai-panel-expanded':''}" data-action="ai-panel-backdrop"><section class="ai-panel" role="dialog" aria-modal="true" aria-label="MMEETT AI"><div class="ai-panel-grabber" data-ai-drag-handle aria-label="下滑关闭"></div><header class="ai-panel-header"><button class="ai-panel-icon-button" type="button" data-action="${state.aiPanelExpanded?'ai-return-panel':'close-ai-panel'}" aria-label="${state.aiPanelExpanded?'返回':'关闭'}">${state.aiPanelExpanded?icon('back',23,2):icon('close',23,2)}</button><h2>MMEETT AI</h2><div class="ai-panel-actions">${rightAction}</div></header><p class="ai-panel-hint" role="status">${escapeHtml(state.aiPanelHint)}</p><div class="ai-panel-content">${body}</div><div class="ai-panel-bottom">${aiComposerMarkup()}<p class="ai-disclaimer">内容由 AI 生成，仅供参考</p></div></section></div>`;
+ return `<div class="ai-panel-root ${state.aiPanelExpanded?'ai-panel-expanded':''}" data-action="ai-panel-backdrop"><section class="ai-panel" role="dialog" aria-modal="true" aria-label="JEETOO AI"><div class="ai-panel-grabber" data-ai-drag-handle aria-label="下滑关闭"></div><header class="ai-panel-header"><button class="ai-panel-icon-button" type="button" data-action="${state.aiPanelExpanded?'ai-return-panel':'close-ai-panel'}" aria-label="${state.aiPanelExpanded?'返回':'关闭'}">${state.aiPanelExpanded?icon('back',23,2):icon('close',23,2)}</button><h2>JEETOO AI</h2><div class="ai-panel-actions">${rightAction}</div></header><p class="ai-panel-hint" role="status">${escapeHtml(state.aiPanelHint)}</p><div class="ai-panel-content">${body}</div><div class="ai-panel-bottom">${aiComposerMarkup()}<p class="ai-disclaimer">内容由 AI 生成，仅供参考</p></div></section></div>`;
 }
-function aiComposerMarkup(){return `<form class="ai-input-capsule ai-full-input-capsule" id="ai-chat-form"><input id="ai-chat-input" name="message" type="text" value="${escapeHtml(state.aiDraft)}" placeholder="按住说话 · 轻点输入" aria-label="输入消息" autocomplete="off" enterkeyhint="send"><button type="button" class="ai-voice-button ${state.aiVoiceActive?'ai-voice-active':''}" data-action="ai-voice-toggle" aria-label="语音输入">${icon('voice',26,1.8)}</button></form>`;}
+function aiComposerMarkup({home=false,variant='panel',recordingId=null}={}){
+ const draft=String(state.aiDraft||''),placeholder=state.profile.language==='English'?'Hold to speak · Tap to type':state.profile.language==='日本語'?'長押しで話す · タップして入力':'按住说话 · 轻点输入';
+ const formId=home?'home-ai-form':variant==='recording'?'recording-ai-form':variant==='assistant'?'assistant-ai-form':variant==='fullscreen'?'ai-full-form':'ai-chat-form';
+ const inputId=home?'home-ai-input':variant==='recording'?'recording-ai-input':variant==='assistant'?'assistant-ai-input':variant==='fullscreen'?'ai-full-input':'ai-chat-input';
+ const scope=home?'all':variant==='recording'?'recording':'active';
+ const scopeId=scope==='recording'?`data-recording-id="${Number(recordingId??state.recordingId)}"`:'';
+ const classes=['ai-input-capsule','ai-full-input-capsule',home?'home-ai-entry':'',variant==='recording'?'recording-composer':''].filter(Boolean).join(' ');
+ return `<form class="${classes}" id="${formId}" data-ai-composer data-ai-scope="${scope}" ${scopeId}><input id="${inputId}" class="ai-composer-input" name="message" type="text" value="${escapeHtml(draft)}" placeholder="${placeholder}" aria-label="${state.profile.language==='English'?'Ask a question':state.profile.language==='日本語'?'質問を入力':'输入问题'}" autocomplete="off" enterkeyhint="send"><button type="button" class="ai-voice-button ${state.aiVoiceActive?'ai-voice-active':''}" data-action="ai-voice-toggle" aria-label="${state.profile.language==='English'?'Voice input':state.profile.language==='日本語'?'音声入力':'语音输入'}" ${draft.trim()?'hidden':''}>${icon('voice',26,1.8)}</button><button type="submit" class="ai-send-button" aria-label="${state.profile.language==='English'?'Send':state.profile.language==='日本語'?'送信':'发送'}" ${draft.trim()?'':'hidden'}>${icon('send',22,2)}</button></form>`;
+}
+function homeAiEntryMarkup(){return aiComposerMarkup({home:true});}
+function aiContextForComposer(form){
+ const scope=form?.dataset.aiScope;
+ if(scope==='all')return {scope:'all',recordingId:null};
+ if(scope==='recording')return {scope:'recording',recordingId:Number(form.dataset.recordingId)||state.recordingId};
+ return state.aiContext?.scope==='recording'?{scope:'recording',recordingId:state.aiContext.recordingId??state.recordingId}:{scope:'all',recordingId:null};
+}
+function openAiPanelFromComposer(form){
+ const context=aiContextForComposer(form),sameContext=state.aiContext?.scope===context.scope&&(context.scope==='all'||Number(state.aiContext?.recordingId)===Number(context.recordingId));
+ if(!state.aiPanelOpen&&!sameContext){clearTimeout(aiPanelTimer);state.aiPanelMessages=[];state.aiPanelLoading=false;}
+ state.aiContext=context;state.aiDraft=String(form?.querySelector('.ai-composer-input')?.value??state.aiDraft??'');
+ state.aiPanelOpen=true;state.aiPanelExpanded=false;state.aiFullscreen=false;state.aiPanelChatMode=true;state.aiPanelHint='';state.aiVoiceActive=false;aiPanelFromNav=false;aiHistoryOpen=false;aiHistoryDetail=null;
+ renderModal();
+ requestAnimationFrame(()=>{const input=document.querySelector('#ai-overlay-root .ai-panel .ai-composer-input');if(input){input.focus();input.setSelectionRange?.(input.value.length,input.value.length);}});
+}
 const aiInsightMocks={
  summary:{title:'录音总结',paragraphs:['本段录音讨论了如何简化录音产品体验。发言者认为，产品应减少复杂、零散的功能，把录音和 AI 问答等核心能力做好。','核心方向是让用户能够轻松完成录音、查看转写，并直接向 AI 提问；流程越清晰，新用户越容易上手。']},
  todo:{title:'待办事项',paragraphs:['暂无明确待办事项。录音中提到了继续优化核心录音与 AI 问答体验，但没有明确的负责人、截止时间或具体执行安排。']},
@@ -749,7 +913,12 @@ const aiInsightMocks={
  core:{title:'核心内容',paragraphs:['讨论的核心是让录音产品回归简单直接：先把录音和转写做好，再通过 AI 问答帮助用户理解内容。','功能设计应围绕这条主流程展开，减少不必要的复杂操作，让第一次使用的人也能快速上手。']},
  note:{title:'文字笔记',paragraphs:['产品应聚焦录音、转写和 AI 问答等核心能力，让用户能够顺畅地完成记录、查看内容并继续提问。后续优化应优先减少复杂操作和低频功能，保持体验清晰、简单、易上手。']}
 };
-function aiPanelReply(prompt,key){
+function aiPanelReply(prompt,key,context=state.aiContext){
+ if(context?.scope==='all'){
+  if(/总结|概括/.test(prompt))return '我会结合你有权限访问的全部录音进行整理。当前 Mock 结果显示，录音内容涵盖产品体验、会议记录与日常安排等主题；你可以继续指定时间或关键词来缩小范围。';
+  if(/待办|任务|要做/.test(prompt))return '我会从你有权限访问的全部录音中查找明确的行动项。当前 Mock 结果没有汇总到明确负责人和截止时间；你可以继续提供录音标题或日期范围。';
+  return '我会结合你有权限访问的全部录音内容回答，不会限定在某一条录音。当前为前端 Mock 回复，你可以继续指定录音标题、日期或主题。';
+ }
  if(prompt==='总结一下')return '这段录音主要讨论了录音产品的功能设计和体验优化。核心观点是减少复杂功能，突出录音、转写和 AI 问答等核心能力，让用户更容易上手。';
  if(prompt==='这段录音里有哪些待办事项？')return '这段录音没有提到明确的负责人或截止时间。可以跟进的方向是梳理核心录音、转写和 AI 问答流程，并评估哪些复杂功能可以简化。';
  if(prompt==='请进一步分析这段录音')return '从讨论来看，关键问题是如何在功能丰富度和易用性之间取得平衡。建议先围绕“录音、转写、AI 问答”这条主流程优化，再依据用户反馈逐步决定其他功能的优先级。';
@@ -757,18 +926,20 @@ function aiPanelReply(prompt,key){
  if(insight)return insight.paragraphs.join('\n\n');
  return '结合这段录音，建议优先围绕录音、转写和 AI 问答等核心体验继续梳理。你也可以告诉我希望重点展开的部分。';
 }
-function sendAiPanelMessage(prompt,key){
+function sendAiPanelMessage(prompt,key,context=state.aiContext){
  const text=String(prompt||'').trim();if(!text||state.aiPanelLoading)return false;
+ if(context)state.aiContext={scope:context.scope==='recording'?'recording':'all',recordingId:context.scope==='recording'?context.recordingId??state.recordingId:null};
  const inlineAssistant=state.tab==='assistant'&&!state.aiPanelOpen&&state.recordingId===null;
  if(!inlineAssistant)state.aiPanelOpen=true;
  state.aiPanelChatMode=true;state.aiDraft='';state.aiPanelMessages.push({role:'user',text});state.aiPanelLoading=true;
  const renderAi=()=>inlineAssistant?render():renderModal();
  clearTimeout(aiPanelTimer);renderAi();
- aiPanelTimer=window.setTimeout(()=>{state.aiPanelMessages.push({role:'assistant',text:aiPanelReply(text,key)});state.aiPanelLoading=false;renderAi();const transcript=document.getElementById('ai-panel-conversation');if(transcript)transcript.scrollTop=transcript.scrollHeight;},620);
+ aiPanelTimer=window.setTimeout(()=>{let reply;try{reply=aiPanelReply(text,key,state.aiContext);}catch(error){reply='暂时无法生成回答，请稍后重试。';state.aiPanelHint='回答失败，请重试。';}const restoreComposerFocus=Boolean(document.activeElement?.matches?.('.ai-composer-input'));state.aiPanelMessages.push({role:'assistant',text:reply});state.aiPanelLoading=false;renderAi();const transcript=document.getElementById('ai-panel-conversation');if(transcript)transcript.scrollTop=transcript.scrollHeight;if(restoreComposerFocus)requestAnimationFrame(()=>document.querySelector(state.aiPanelOpen?'.ai-panel .ai-composer-input':'.assistant-ai-screen .ai-composer-input')?.focus());},620);
  const transcript=document.getElementById('ai-panel-conversation');if(transcript)transcript.scrollTop=transcript.scrollHeight;
  return true;
 }
-function openAiPanelWithPrompt(prompt,key){
+function openAiPanelWithPrompt(prompt,key,context={scope:'all',recordingId:null}){
+ state.aiContext={scope:context?.scope==='recording'?'recording':'all',recordingId:context?.scope==='recording'?context.recordingId??state.recordingId:null};
  if(!state.aiPanelOpen){clearTimeout(aiPanelTimer);state.aiPanelMessages=[];state.aiPanelLoading=false;state.aiDraft='';}
  state.aiPanelOpen=true;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelChatMode=true;state.aiPanelHint='';state.aiVoiceActive=false;aiPanelFromNav=false;
  sendAiPanelMessage(prompt,key);
@@ -783,13 +954,13 @@ function aiFullscreenView(){
  const related=FILES.find(file=>file.id===(state.recordingId??state.detail??1))||FILES[0];
  const messages=state.messages.map(message=>`<div class="${message.role==='user'?'ai-full-user':'ai-full-assistant'}">${escapeHtml(message.text)}</div>`).join('');
  const replies=[['总结一下','note'],['有要办的吗','sparkle'],['往深里想想','sparkle']];
- return `<section class="ai-fullscreen" aria-label="MMEETT AI 对话"><header class="ai-full-topbar"><button class="ai-full-icon" type="button" data-action="ai-return-panel" aria-label="返回 AI 面板">${icon('back',24,2)}</button><span class="ai-full-topbar-spacer"></span><div><button class="ai-full-icon" type="button" data-action="ai-history-open" aria-label="历史对话">${icon('more',22,2.2)}</button></div></header><div class="ai-full-hero"><div class="ai-full-avatar" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M9 20 7 9l11 5M39 20l2-11-11 5" fill="#77787D"/><path d="M8 24c0-11 6-18 16-18s16 7 16 18-6 18-16 18S8 35 8 24Z" fill="#B8B9BD"/><circle cx="18" cy="23" r="4" fill="#333438"/><circle cx="30" cy="23" r="4" fill="#333438"/><path d="m22 29 2 3 2-3" stroke="#55565A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 43v2m18-2v2" stroke="#77787D" stroke-width="3" stroke-linecap="round"/></svg></div><div class="ai-full-name">小步</div><p class="ai-full-time">晚上 11:44</p></div><div class="ai-full-messages" id="ai-full-messages"><button class="ai-recording-card" type="button" data-action="ai-open-related-recording" data-value="${related.id}"><span class="ai-recording-icon">${icon('device',27,1.7)}</span><span class="ai-recording-copy"><strong>${escapeHtml(related.title)}</strong><small>录音文件 · ${escapeHtml(related.duration)}</small></span></button>${messages}</div><div class="ai-full-bottom"><div class="ai-full-replies">${replies.map(([reply,glyph])=>`<button type="button" class="ai-full-reply" data-action="ai-full-reply" data-value="${escapeHtml(reply)}">${icon(glyph,16,1.8,'ai-reply-leading')}<span>${escapeHtml(reply)}</span>${icon('right',16,2)}</button>`).join('')}</div><p class="ai-full-hint" role="status">${escapeHtml(state.aiPanelHint)}</p>${aiComposerMarkup()}<p class="ai-disclaimer">内容由 AI 生成，仅供参考</p></div>${aiInsightView()}</section>`;
+ return `<section class="ai-fullscreen" aria-label="JEETOO AI 对话"><header class="ai-full-topbar"><button class="ai-full-icon" type="button" data-action="ai-return-panel" aria-label="返回 AI 面板">${icon('back',24,2)}</button><span class="ai-full-topbar-spacer"></span><div><button class="ai-full-icon" type="button" data-action="ai-history-open" aria-label="历史对话">${icon('more',22,2.2)}</button></div></header><div class="ai-full-hero"><div class="ai-full-avatar" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M9 20 7 9l11 5M39 20l2-11-11 5" fill="#77787D"/><path d="M8 24c0-11 6-18 16-18s16 7 16 18-6 18-16 18S8 35 8 24Z" fill="#B8B9BD"/><circle cx="18" cy="23" r="4" fill="#333438"/><circle cx="30" cy="23" r="4" fill="#333438"/><path d="m22 29 2 3 2-3" stroke="#55565A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 43v2m18-2v2" stroke="#77787D" stroke-width="3" stroke-linecap="round"/></svg></div><div class="ai-full-name">小步</div><p class="ai-full-time">晚上 11:44</p></div><div class="ai-full-messages" id="ai-full-messages"><button class="ai-recording-card" type="button" data-action="ai-open-related-recording" data-value="${related.id}"><span class="ai-recording-icon">${icon('device',27,1.7)}</span><span class="ai-recording-copy"><strong>${escapeHtml(related.title)}</strong><small>录音文件 · ${escapeHtml(related.duration)}</small></span></button>${messages}</div><div class="ai-full-bottom"><div class="ai-full-replies">${replies.map(([reply,glyph])=>`<button type="button" class="ai-full-reply" data-action="ai-full-reply" data-value="${escapeHtml(reply)}">${icon(glyph,16,1.8,'ai-reply-leading')}<span>${escapeHtml(reply)}</span>${icon('right',16,2)}</button>`).join('')}</div><p class="ai-full-hint" role="status">${escapeHtml(state.aiPanelHint)}</p>${aiComposerMarkup({variant:'fullscreen'})}<p class="ai-disclaimer">内容由 AI 生成，仅供参考</p></div>${aiInsightView()}</section>`;
 }
 function deviceDetailView(){
  const viewDevice=state.deviceDetailName||state.device, connected=viewDevice===state.device, status=connected?'已连接':'离线', settings=state.deviceSettings;
  const row=(label,value,action,options={})=>`<button class="hardware-action-row" data-action="${action}"><span>${label}</span>${options.dot?'<i class="attention-dot"></i>':''}${value?`<span class="action-value">${value}</span>`:''}${icon('right',18,2,'row-chevron')}</button>`;
  const settingsDialog=state.deviceDialog?`<div class="sheet-root" data-action="device-backdrop"><section class="bottom-sheet" role="dialog" aria-modal="true"><div class="sheet-grabber"></div><div class="sheet-heading"><h2>${state.deviceDialog==='nfc'?'NFC 设置':state.deviceDialog==='guide'?'使用指南':state.deviceDialog==='unbind-options'?'断开连接或解绑设备':state.deviceDialog==='unbind-confirm'?'解绑设备':state.deviceDialog==='reset-confirm'?'恢复出厂设置':state.deviceDialog==='firmware-reminder'?'固件更新提醒':'设备操作'}</h2><button class="icon-button" data-action="device-dialog-close" aria-label="关闭">${icon('close',21)}</button></div>${state.deviceDialog==='nfc'?`<p class="hardware-dialog-copy">NFC ${settings.nfc?'已开启':'已关闭'}。这里仅演示设置状态，不会修改真实设备。</p><button class="attachment-button" data-action="toggle-nfc">${settings.nfc?'关闭 NFC':'开启 NFC'}</button>`:state.deviceDialog==='guide'?`<p class="hardware-dialog-copy">1. 长按设备电源键开机。<br>2. 在首页选择设备并完成连接。<br>3. 使用设备开始录音，录音文件会显示在文件列表中。</p>`:state.deviceDialog==='unbind-options'?`<button class="unbind-choice ${state.unbindMode==='disconnect'?'selected':''}" data-action="unbind-mode" data-value="disconnect"><strong>断开连接</strong><span>仅断开录音卡连接，设备仍绑定在当前账号</span></button><button class="unbind-choice ${state.unbindMode==='unbind'?'selected':''}" data-action="unbind-mode" data-value="unbind"><strong>解绑</strong><span>解绑后，录音卡可以绑定到另一个账号</span></button><div class="dialog-actions"><button data-action="device-dialog-close">取消</button><button class="confirm" data-action="confirm-unbind-choice">确认</button></div>`:state.deviceDialog==='unbind-confirm'||state.deviceDialog==='reset-confirm'?`<p class="hardware-dialog-copy">${state.deviceDialog==='unbind-confirm'?'解绑后，该设备会从本地演示列表中移除。':'确认后将重置当前设备的本地演示设置。'}</p><button class="attachment-button" data-action="confirm-device-action">确认${state.deviceDialog==='unbind-confirm'?'解绑':'恢复'}</button>`:`<div class="firmware-reminder"><h3>固件更新提醒</h3><p class="hardware-dialog-copy">设备指示灯红蓝交替闪烁时，表示正在更新。<br>指示灯熄灭后，更新完成。</p><div class="hardware-illustration"><i class="hardware-led"></i></div><div class="firmware-battery">▮ ${settings.battery}%</div><div class="firmware-warning"><strong>注意事项</strong>电量需高于 20%，并请先停止所有录音。</div><div class="firmware-actions"><button data-action="firmware-later">稍后</button><button class="primary" data-action="firmware-start">立即更新</button></div></div>`}</section></div>`:'';
- return `<section class="secondary-page hardware-page"><header class="hardware-nav"><button data-action="device-back" aria-label="返回">${icon('back',24,2)}</button><span></span><button class="hardware-help" data-action="device-help" aria-label="帮助">?</button></header><div class="hardware-hero"><div class="hardware-illustration" aria-label="设备示意图"><i class="hardware-led"></i></div><div class="hardware-status ${connected?'':'offline'}"><i></i>${status}</div></div><section class="hardware-info-group"><div class="hardware-info-row"><span>名称</span><strong>${escapeHtml(viewDevice)}</strong></div><div class="hardware-info-row"><span>SN Code</span><strong>MT2-26A-${viewDevice==='MMEETT Pro'?'00009':'00010'}</strong></div><div class="hardware-info-row"><span>电量</span><strong>${connected?`${settings.battery}%`:'–'}</strong></div><div class="hardware-info-row"><span>存储</span><strong>${connected?settings.storage:'–'}</strong></div></section><section class="hardware-action-group">${row('固件版本',settings.firmware,'device-firmware')}${row('恢复出厂设置','','device-reset')}</section><button class="hardware-danger" data-action="device-unbind">${connected?'断开连接或解绑':'解绑设备'}</button></section>${settingsDialog}`;
+ return `<section class="secondary-page hardware-page"><header class="hardware-nav"><button data-action="device-back" aria-label="返回">${icon('back',24,2)}</button><span></span><button class="hardware-help" data-action="device-help" aria-label="帮助">?</button></header><div class="hardware-hero"><div class="hardware-illustration" aria-label="设备示意图"><i class="hardware-led"></i></div><div class="hardware-status ${connected?'':'offline'}"><i></i>${status}</div></div><section class="hardware-info-group"><div class="hardware-info-row"><span>名称</span><strong>${escapeHtml(deviceDisplayName(viewDevice))}</strong></div><div class="hardware-info-row"><span>SN Code</span><strong>MT2-26A-${viewDevice==='JEETOO Pro'?'00009':'00010'}</strong></div><div class="hardware-info-row"><span>电量</span><strong>${connected?`${settings.battery}%`:'–'}</strong></div><div class="hardware-info-row"><span>存储</span><strong>${connected?settings.storage:'–'}</strong></div></section><section class="hardware-action-group">${row('固件版本',settings.firmware,'device-firmware')}${row('恢复出厂设置','','device-reset')}</section><button class="hardware-danger" data-action="device-unbind">${connected?'断开连接或解绑':'解绑设备'}</button></section>${settingsDialog}`;
 }
 function bindingSuccessView(){return `<section class="success-page"><button class="success-close" data-action="success-close" aria-label="关闭">×</button><div class="success-check">✓</div><h1>绑定成功</h1><div class="hardware-illustration success-device"><i class="hardware-led"></i></div><button class="success-start" data-action="success-start">开始使用</button></section>`;}
 function firmwareFlowView(){
@@ -817,8 +988,17 @@ function profileView(){
  else if(dialog==='language'||dialog==='transcription'){
   const key=dialog==='language'?'language':'transcriptionLanguage', choices=dialog==='language'?['简体中文','English','日本語']:['中文','English','日本語'];
   dialogContent=`<p class="hardware-dialog-copy">选择${dialog==='language'?'应用显示语言':'AI 助手的转写语言'}。</p><div class="profile-options">${choices.map(choice=>`<button class="${p[key]===choice?'selected':''}" data-action="profile-choice" data-key="${key}" data-value="${choice}"><span>${choice}</span>${p[key]===choice?icon('check',19,2):''}</button>`).join('')}</div>`;
- }else if(dialog==='card') dialogContent=`<p class="hardware-dialog-copy">当前设备：${escapeHtml(state.device)}</p><button class="attachment-button" data-action="profile-open-device">查看工卡详情</button>`;
- return `<section class="secondary-page profile-page"><h1>个人中心</h1><div class="profile-card" role="button" tabindex="0" data-action="profile-edit"><span class="profile-avatar">${p.avatar?`<img src="${p.avatar}" alt="个人头像">`:icon('user',43,1.55)}</span><span class="profile-card-copy"><strong>${escapeHtml(p.name)}</strong><span>${escapeHtml(state.account.email)}</span></span>${icon('right',21,2,'row-chevron')}</div><section class="profile-settings-card"><button class="profile-setting-row" data-action="profile-item" data-value="card">${icon('device',24)}<span>工卡</span>${icon('right',20,2,'row-chevron')}</button><button class="profile-setting-row" data-action="profile-item" data-value="language">${icon('globe',24)}<span>语言</span><small>${escapeHtml(p.language)}</small>${icon('right',20,2,'row-chevron')}</button><button class="profile-setting-row" data-action="profile-item" data-value="transcription">${icon('robot',24)}<span>AI助手转写语言</span><small>${escapeHtml(p.transcriptionLanguage)}</small>${icon('right',20,2,'row-chevron')}</button><button class="profile-setting-row" data-action="profile-item" data-value="about">${icon('info',24)}<span>关于</span>${icon('right',20,2,'row-chevron')}</button></section><button class="profile-logout" data-action="profile-logout">${icon('logout',24)}<span>退出登录</span></button>${dialog?`<div class="sheet-root" data-action="profile-backdrop"><section class="bottom-sheet profile-dialog" role="dialog" aria-modal="true"><div class="sheet-grabber"></div><div class="sheet-heading"><h2>${title}</h2><button class="icon-button" data-action="profile-close" aria-label="关闭">${icon('close',21)}</button></div>${dialogContent}</section></div>`:''}</section>`;
+ }else if(dialog==='card') dialogContent=`<p class="hardware-dialog-copy">当前设备：${escapeHtml(deviceDisplayName(state.device))}</p><button class="attachment-button" data-action="profile-open-device">查看工卡详情</button>`;
+ return `<section class="secondary-page profile-page"><h1>个人中心</h1><div class="profile-card" role="button" tabindex="0" data-action="profile-edit"><span class="profile-avatar">${p.avatar?`<img src="${p.avatar}" alt="个人头像">`:icon('user',43,1.55)}</span><span class="profile-card-copy"><strong>${escapeHtml(p.name)}</strong><span>${escapeHtml(state.account.email)}</span></span>${icon('right',21,2,'row-chevron')}</div><section class="profile-settings-card"><button class="profile-setting-row" data-action="profile-item" data-value="card">${icon('device',24)}<span>工卡</span>${icon('right',20,2,'row-chevron')}</button><button class="profile-setting-row" data-action="profile-item" data-value="language">${icon('globe',24)}<span>语言</span><small>${escapeHtml(p.language)}</small>${icon('right',20,2,'row-chevron')}</button><button class="profile-setting-row" data-action="profile-item" data-value="about">${icon('info',24)}<span>关于</span>${icon('right',20,2,'row-chevron')}</button></section><button class="profile-logout" data-action="profile-logout">${icon('logout',24)}<span>退出登录</span></button>${dialog?`<div class="sheet-root" data-action="profile-backdrop"><section class="bottom-sheet profile-dialog" role="dialog" aria-modal="true"><div class="sheet-grabber"></div><div class="sheet-heading"><h2>${title}</h2><button class="icon-button" data-action="profile-close" aria-label="关闭">${icon('close',21)}</button></div>${dialogContent}</section></div>`:''}</section>`;
+}
+function sideMenuView(){
+ if(!state.sidebarOpen)return '';
+ const p=state.profile,t=homeText(),isEnglish=state.profile.language==='English',isJapanese=state.profile.language==='日本語';
+ const languageChoices=isEnglish?['简体中文','English','日本語']:isJapanese?['简体中文','English','日本語']:['简体中文','English','日本語'];
+ let dialog='';
+ if(state.profileDialog==='logout')dialog=`<div class="side-dialog-backdrop"><section class="side-dialog" role="dialog" aria-modal="true"><h2>${t.logout}</h2><p>${t.logoutConfirm}</p><div class="side-dialog-actions"><button data-action="sidebar-dialog-close">${t.cancel}</button><button class="primary" data-action="profile-logout-confirm">${t.confirmLogout}</button></div></section></div>`;
+ if(state.profileDialog==='language')dialog=`<div class="side-dialog-backdrop" data-action="sidebar-dialog-backdrop"><section class="side-dialog" role="dialog" aria-modal="true"><h2>${t.language}</h2><div class="side-language-list">${languageChoices.map(choice=>`<button data-action="profile-choice" data-key="language" data-value="${choice}"><span>${choice}</span>${p.language===choice?icon('check',18,2):''}</button>`).join('')}</div><div class="side-dialog-actions" style="margin-top:16px"><button data-action="sidebar-dialog-close">${t.cancel}</button></div></section></div>`;
+ return `<div class="side-menu-root ${state.sidebarClosing?'closing':''}" data-action="sidebar-backdrop"><aside class="side-drawer" aria-label="${t.menuLabel}"><div class="side-drawer-brand"><span>${t.brand}</span><button class="side-drawer-close" data-action="sidebar-close" aria-label="${t.closeMenu}">${icon('close',20,2)}</button></div><button class="side-profile" data-action="profile-edit"><span class="profile-avatar">${p.avatar?`<img src="${p.avatar}" alt="个人头像">`:icon('user',33,1.5)}</span><span class="profile-card-copy"><strong>${escapeHtml(p.name)}</strong><span>${escapeHtml(state.account.email)}</span></span>${icon('right',20,2,'row-chevron')}</button><nav class="side-menu-items" aria-label="${t.menuLabel}"><button class="side-menu-item" data-action="profile-item" data-value="card">${icon('device',22,1.7)}<span>${t.card}</span>${icon('right',19,1.8,'row-chevron')}</button><button class="side-menu-item" data-action="profile-item" data-value="language">${icon('globe',22,1.7)}<span>${t.language}</span><small>${escapeHtml(p.language)}</small>${icon('right',19,1.8,'row-chevron')}</button><button class="side-menu-item" data-action="profile-item" data-value="about">${icon('info',22,1.7)}<span>${t.about}</span>${icon('right',19,1.8,'row-chevron')}</button></nav><div class="side-menu-footer"><button class="side-logout" data-action="profile-logout">${icon('logout',22,1.7)}<span>${t.logout}</span></button></div>${dialog}</aside></div>`;
 }
 function accountView(){
  const a=state.account, dialog=state.accountDialog, label={name:'昵称',password:'密码',email:'邮箱',delete:'删除账号'}[dialog]||'';
@@ -828,16 +1008,34 @@ function accountView(){
  else if(['name','password','email'].includes(dialog)){const current=dialog==='name'?state.profile.name:dialog==='email'?a.email:'';editor=`<form id="account-edit-form" class="profile-edit-form"><input type="hidden" name="field" value="${dialog}"><label>${label}<input name="value" type="${dialog==='password'?'password':'text'}" value="${escapeHtml(current)}" placeholder="${dialog==='password'?'请输入新密码':`请输入${label}`}" minlength="${dialog==='password'?6:1}" required></label><button class="profile-edit-save" type="submit">保存</button></form>`;}
  return `<section class="account-page"><header class="account-header"><button data-action="account-back" aria-label="返回">${icon('back',24,2)}</button><h1>个人资料</h1><span></span></header><div class="account-profile-hero"><div class="account-avatar-wrap"><div class="account-avatar">${state.profile.avatar?`<img src="${state.profile.avatar}" alt="个人头像">`:`<span class="avatar-silhouette">${icon('user',58,1.25)}</span>`}</div></div><button class="account-profile-name" data-action="account-profile-edit">${escapeHtml(state.profile.name)}</button></div><section class="account-group"><button class="account-row" data-action="account-edit" data-value="email"><span>邮箱</span><small>${escapeHtml(a.email)}</small>${icon('right',19,1.8)}</button><button class="account-row" data-action="account-edit" data-value="password"><span>修改密码</span>${icon('right',19,1.8)}</button><div class="account-row static"><span>登录方式</span><small>${escapeHtml(a.loginMethod)}</small></div></section><button class="account-delete" data-action="account-edit" data-value="delete">注销账号</button>${dialog?`<div class="sheet-root" data-action="account-backdrop"><section class="bottom-sheet ${dialog==='profile'?'account-profile-edit-sheet':''}" role="dialog" aria-modal="true"><div class="sheet-grabber"></div><div class="sheet-heading"><h2>${title}</h2><button class="icon-button" data-action="account-close" aria-label="关闭">${icon('close',21)}</button></div>${editor}</section></div>`:''}</section>`;
 }
-function badgeEditorView(){return `<section class="badge-editor-page"><iframe title="工卡管理与设计" src="badge-editor.html" allow="clipboard-read; clipboard-write"></iframe></section>`;}
+function badgeEditorView(){return `<section class="badge-editor-page"><iframe title="工卡管理与设计" src="badge-editor.html?feature=personal-badge-crop-v2" allow="clipboard-read; clipboard-write"></iframe></section>`;}
 function recordingActionsView(){
  if(!state.recordingActionsOpen)return '';
  const file=FILES.find(item=>item.id===state.recordingId);if(!file)return '';
  const rename=state.recordingDialog==='rename';
  return `<div class="sheet-root recording-ops-root" data-action="recording-ops-backdrop"><section class="bottom-sheet recording-ops-sheet" role="dialog" aria-modal="true" aria-label="${rename?'重命名录音':'录音操作'}"><div class="sheet-grabber"></div><div class="sheet-heading"><h2>${rename?'重命名录音':'录音操作'}</h2><button class="icon-button" data-action="recording-ops-close" aria-label="关闭">${icon('close',21)}</button></div>${rename?`<form id="recording-rename-form"><input class="recording-rename-input" name="title" maxlength="80" value="${escapeHtml(state.recordingDraftTitle||file.title)}" aria-label="录音名称" required><div class="recording-rename-actions"><button type="button" data-action="recording-rename-cancel">取消</button><button class="primary" type="submit">保存</button></div></form>`:`<div class="recording-ops-group"><p class="recording-ops-label">分享</p><button class="recording-ops-row" data-action="share-recording-transcript">${icon('note',21,1.8)}<span>复制转写文本</span></button><button class="recording-ops-row" data-action="share-recording-summary">${icon('memory',21,1.8)}<span>复制纪要文本</span></button><button class="recording-ops-row" data-action="share-recording-audio">${icon('voice',21,1.8)}<span>导出录音</span></button></div><div class="recording-ops-group"><p class="recording-ops-label">管理</p><button class="recording-ops-row" data-action="recording-rename">${icon('edit',21,1.8)}<span>重命名录音</span></button><button class="recording-ops-row" data-action="recording-delete">${icon('trash',21,1.8)}<span>删除录音</span></button></div>`}</section>${state.recordingDialog==='delete'?`<div class="confirm-overlay" data-action="recording-delete-backdrop"><section class="confirm-card" role="dialog" aria-modal="true"><h3>删除录音？</h3><p>删除后，这条录音将从文件列表中移除。</p><div class="dialog-actions"><button data-action="recording-delete-cancel">取消</button><button class="danger-confirm" data-action="recording-delete-confirm">删除</button></div></section></div>`:''}</div>`;
 }
+function photoEntries(fileId){return Array.isArray(state.photos[fileId])?state.photos[fileId]:[];}
+function noteEntries(fileId){return Array.isArray(state.notes[fileId])?state.notes[fileId]:[];}
+function formatNoteDate(value){const date=new Date(value);if(Number.isNaN(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;}
+function attachmentsTabMarkup(file,photos=photoEntries(file.id)){
+ const notes=[...noteEntries(file.id)].sort((a,b)=>b.createdAt-a.createdAt);
+ const photoTiles=photos.map(photo=>`<button class="photo-thumb" data-action="preview-photo" data-value="${escapeHtml(photo.id)}" aria-label="查看照片：${escapeHtml(photo.name||'附件照片')}">${photo.src?`<img src="${photo.src}" alt="${escapeHtml(photo.name||'附件照片')}">`:`<span>${escapeHtml(photo.name||'照片')}</span>`}</button>`).join('');
+ const noteRows=notes.map(note=>`<article class="note-row"><button class="note-open" data-action="note-edit" data-value="${escapeHtml(note.id)}"><span>${escapeHtml(note.text)}</span><small class="note-meta">${formatNoteDate(note.createdAt)}</small></button><button class="note-more" data-action="note-menu-toggle" data-value="${escapeHtml(note.id)}" aria-label="备注操作">${icon('more',19,2.1)}</button>${state.noteMenuId===note.id?`<div class="note-menu-pop" role="menu"><button data-action="note-edit" data-value="${escapeHtml(note.id)}" role="menuitem">编辑备注</button><button data-action="note-delete" data-value="${escapeHtml(note.id)}" role="menuitem">删除备注</button></div>`:''}</article>`).join('');
+ return `<div class="attachments-content"><input id="attachment-photo-picker" type="file" accept="image/*" multiple hidden><section class="attachment-module"><header class="attachment-module-head"><div><h3 class="attachment-module-title">照片 <small>${photos.length} 张</small></h3><p class="attachment-module-description">白板、投屏、名片，拍下来放这里</p></div><button class="attachment-add" data-action="add-photo">${icon('plus',17,2)}<span>添加</span></button></header>${photos.length?`<div class="photo-grid">${photoTiles}</div>`:`<button class="photo-add-empty" data-action="add-photo">${icon('plus',19,1.8)}<span>添加照片</span></button>`}</section><section class="attachment-module"><header class="attachment-module-head"><div><h3 class="attachment-module-title">备注 <small>${notes.length} 条</small></h3><p class="attachment-module-description">会上的补充、会后想补充的</p></div><button class="attachment-add" data-action="note-add">${icon('plus',17,2)}<span>添加</span></button></header>${notes.length?`<div class="note-list">${noteRows}</div>`:`<div class="attachment-empty">暂无备注</div>`}</section></div>`;
+}
+function attachmentOverlaysView(){
+ const photos=photoEntries(state.recordingId);let overlays='';
+ if(state.noteEditorOpen)overlays+=`<div class="sheet-root" data-action="note-editor-backdrop"><section class="bottom-sheet note-edit-sheet" role="dialog" aria-modal="true" aria-label="${state.noteEditingId?'编辑备注':'添加备注'}"><div class="sheet-grabber"></div><div class="sheet-heading"><h2>${state.noteEditingId?'编辑备注':'添加备注'}</h2><button class="icon-button" data-action="note-editor-cancel" aria-label="关闭">${icon('close',21)}</button></div><form class="note-edit-form" id="note-editor-form"><textarea class="note-editor-textarea" id="note-editor-text" placeholder="写下备注内容…" maxlength="2000">${escapeHtml(state.noteDraft)}</textarea><div class="note-editor-footer"><button type="button" data-action="note-editor-cancel">取消</button><button type="button" class="primary" data-action="note-save" ${state.noteDraft.trim()?'':'disabled'}>保存</button></div></form></section></div>`;
+ if(state.noteDeleteId)overlays+=`<div class="confirm-overlay" data-action="note-delete-backdrop"><section class="confirm-card" role="dialog" aria-modal="true"><h3>删除备注</h3><p>确定删除这条备注吗？</p><div class="dialog-actions"><button data-action="note-delete-cancel">取消</button><button class="danger-confirm" data-action="note-delete-confirm">删除</button></div></section></div>`;
+ if(state.photoActionId)overlays+=`<div class="sheet-root" data-action="photo-action-backdrop"><section class="bottom-sheet" role="dialog" aria-modal="true" aria-label="照片操作"><div class="sheet-grabber"></div><div class="sheet-heading"><h2>照片操作</h2><button class="icon-button" data-action="photo-action-close" aria-label="关闭">${icon('close',21)}</button></div><button class="attachment-action-row" style="color:#c94b4b" data-action="photo-delete" data-value="${escapeHtml(state.photoActionId)}">${icon('trash',22,1.8)}<span>删除照片</span></button></section></div>`;
+ if(state.photoDeleteId)overlays+=`<div class="confirm-overlay" data-action="photo-delete-backdrop"><section class="confirm-card" role="dialog" aria-modal="true"><h3>删除照片</h3><p>确定删除这张照片吗？</p><div class="dialog-actions"><button data-action="photo-delete-cancel">取消</button><button class="danger-confirm" data-action="photo-delete-confirm">删除</button></div></section></div>`;
+ if(state.previewPhoto!==null){const photo=photos.find(item=>item.id===state.previewPhoto);if(photo)overlays+=`<div class="image-preview" data-action="photo-preview-backdrop"><div class="image-preview-card">${photo.src?`<img class="photo-preview-image" src="${photo.src}" alt="${escapeHtml(photo.name||'附件照片')}">`:`<span>${escapeHtml(photo.name||'附件照片')}</span>`}<button data-action="close-photo" aria-label="关闭">${icon('close',21)}</button></div></div>`;}
+ return overlays;
+}
 function recordingView(){
  const file=FILES.find(item=>item.id===state.recordingId); if(!file)return '';
- const duration=Number(file.duration.split(':').pop())||21, elapsed=Math.min(state.playSeconds,duration), mm=String(Math.floor(elapsed/60)).padStart(2,'0'), ss=String(elapsed%60).padStart(2,'0'), photos=state.photos[file.id]||0;
+ const duration=Number(file.duration.split(':').pop())||21, elapsed=Math.min(state.playSeconds,duration), mm=String(Math.floor(elapsed/60)).padStart(2,'0'), ss=String(elapsed%60).padStart(2,'0'), photos=photoEntries(file.id);
  const transcriptSegments=transcriptFor(file),summary=summaryFor(file);
  const tabs=[['transcript','逐字稿'],['outline','大纲'],['summary','纪要'],['attachments','附件']].map(([id,title])=>`<button class="${state.detailTab===id?'active':''}" data-action="detail-tab" data-value="${id}">${title}</button>`).join('');
  let body='';
@@ -849,9 +1047,9 @@ function recordingView(){
  }else if(state.detailTab==='summary'){
   body=`<article class="summary-section"><h3>讨论主题</h3><p>${escapeHtml(summary.topic)}</p></article><article class="summary-section"><h3>核心结论</h3><ul>${summary.conclusions.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul></article><article class="summary-section"><h3>后续安排</h3><ul>${summary.actions.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul></article><article class="summary-section"><h3>Mind map</h3><p>${escapeHtml(summary.mindMap)}</p></article>`;
  }else{
-  body=`<button class="attachment-button" data-action="add-attachment">${icon('plus',22,2)}添加附件</button><section class="attachment-card"><div class="attachment-heading"><div><strong>照片 <span class="note-count">${photos?`(${photos})`:''}</span></strong><p>白板、投屏、名片，拍下来放这里</p></div><button data-action="attachment-info" aria-label="照片说明">${icon('right',22)}</button></div><div class="photo-grid"><button class="photo-add" data-action="add-photo">${icon('addPhoto',34,1.5)}添加照片</button>${Array.from({length:photos},(_,i)=>`<button class="photo-thumb" data-action="preview-photo" data-value="${i}"><span>演示附件 ${i+1}</span></button>`).join('')}${photos===0?`<div style="grid-column:span 2;min-height:104px;display:grid;place-items:center;color:#a0a2aa;font-size:14px">${icon('addPhoto',39,1.4)}<span>暂无照片</span></div>`:''}</div></section><section class="attachment-card"><div class="attachment-heading"><div><strong>备注 <span class="note-count">${state.notes[file.id]?'(1)':''}</span></strong><p>会上的补充、会后想补充的</p></div><button data-action="focus-note">＋ 添加备注</button></div><textarea class="note-input" id="note-input" placeholder="添加备注...">${escapeHtml(state.noteDraft||state.notes[file.id]||'')}</textarea><button class="note-save" data-action="save-note">保存备注</button><div style="clear:both"></div></section>`;
+  body=attachmentsTabMarkup(file,photos);
  }
- return `<section class="recording-screen" aria-label="录音详情"><header class="recording-topbar"><button data-action="close-recording" aria-label="返回">${icon('back',25,2.1)}</button><h1 title="${escapeHtml(file.title)}">${escapeHtml(file.title)}</h1><button data-action="recording-more" aria-label="录音操作">${icon('more',23,2)}</button></header><nav class="recording-tabs" aria-label="录音内容分类">${tabs}</nav><div class="recording-body">${body}</div><div class="followup-row"><button data-action="recording-ai-shortcut" data-value="summary">${icon('note',18,1.8)} <span>总结一下　→</span></button><button data-action="recording-ai-shortcut" data-value="todo">${icon('sparkle',18,1.8)} <span>有要办的吗　→</span></button><button data-action="recording-ai-shortcut" data-value="analysis">${icon('sparkle',18,1.8)} <span>往深里想想　→</span></button></div><form class="recording-composer" id="recording-form"><input class="composer-input" id="recording-input" type="text" readonly data-action="open-ai-panel" placeholder="按住说话 · 轻点输入" aria-label="打开 MMEETT AI 对话" autocomplete="off"><button type="button" class="${state.voiceActive?'voice-active':''}" data-action="voice-toggle" aria-label="语音输入">${icon('voice',29,1.9)}</button></form></section>${recordingActionsView()}${state.previewPhoto!==null?`<div class="image-preview"><div class="image-preview-card"><span>演示照片 ${Number(state.previewPhoto)+1}</span><button data-action="close-photo">${icon('close',21)}</button></div></div>`:''}${state.toast?`<div class="recording-toast" role="status">${escapeHtml(state.toast)}</div>`:''}`;
+ return `<section class="recording-screen" aria-label="录音详情"><header class="recording-topbar"><button data-action="close-recording" aria-label="返回">${icon('back',25,2.1)}</button><h1 title="${escapeHtml(file.title)}">${escapeHtml(file.title)}</h1><button data-action="recording-more" aria-label="录音操作">${icon('more',23,2)}</button></header><nav class="recording-tabs" aria-label="录音内容分类">${tabs}</nav><div class="recording-body">${body}</div><div class="followup-row"><button data-action="recording-ai-shortcut" data-value="summary">${icon('note',18,1.8)} <span>总结一下　→</span></button><button data-action="recording-ai-shortcut" data-value="todo">${icon('sparkle',18,1.8)} <span>有要办的吗　→</span></button><button data-action="recording-ai-shortcut" data-value="analysis">${icon('sparkle',18,1.8)} <span>往深里想想　→</span></button></div>${aiComposerMarkup({variant:'recording',recordingId:file.id})}</section>${recordingActionsView()}${state.toast?`<div class="recording-toast" role="status">${escapeHtml(state.toast)}</div>`:''}`;
 }
 document.addEventListener('click',(e)=>{
  if(!fileLongPressSuppressClick)return;
@@ -884,7 +1082,19 @@ document.addEventListener('pointercancel',()=>{
  clearTimeout(fileLongPressTimer);fileLongPressTimer=null;fileLongPressTarget=null;fileLongPressOrigin=null;fileLongPressTriggered=false;fileLongPressSuppressClick=false;
 });
 document.addEventListener('contextmenu',(e)=>{if(e.target.closest?.('.file-card'))e.preventDefault();});
+document.addEventListener('click',(e)=>{if(!photoLongPressSuppressClick)return;photoLongPressSuppressClick=false;if(e.target.closest?.('.photo-thumb')){e.preventDefault();e.stopImmediatePropagation();}},true);
+document.addEventListener('pointerdown',(e)=>{
+ const thumb=e.target.closest?.('.photo-thumb');if(!thumb||!e.isPrimary||(e.pointerType==='mouse'&&e.button!==0))return;
+ clearTimeout(photoLongPressTimer);photoLongPressId=thumb.dataset.value;photoLongPressStart={x:e.clientX,y:e.clientY};photoLongPressTriggered=false;
+ photoLongPressTimer=window.setTimeout(()=>{if(!photoLongPressId)return;photoLongPressTriggered=true;photoLongPressSuppressClick=true;state.photoActionId=photoLongPressId;state.noteMenuId=null;renderModal();},500);
+});
+document.addEventListener('pointermove',(e)=>{if(photoLongPressTimer&&photoLongPressStart&&(Math.abs(e.clientX-photoLongPressStart.x)>12||Math.abs(e.clientY-photoLongPressStart.y)>12)){clearTimeout(photoLongPressTimer);photoLongPressTimer=null;photoLongPressId=null;photoLongPressStart=null;}});
+document.addEventListener('pointerup',()=>{clearTimeout(photoLongPressTimer);photoLongPressTimer=null;if(photoLongPressTriggered){photoLongPressSuppressClick=true;window.setTimeout(()=>{photoLongPressSuppressClick=false;},0);}photoLongPressTriggered=false;photoLongPressId=null;photoLongPressStart=null;});
+document.addEventListener('pointercancel',()=>{clearTimeout(photoLongPressTimer);photoLongPressTimer=null;photoLongPressId=null;photoLongPressStart=null;photoLongPressTriggered=false;photoLongPressSuppressClick=false;});
+document.addEventListener('contextmenu',(e)=>{if(e.target.closest?.('.photo-thumb'))e.preventDefault();});
 function showRecordingToast(message){state.toast=message;clearTimeout(toastTimer);toastTimer=window.setTimeout(()=>{state.toast='';render();},1800);}
+function renderRecordingKeepingScroll(){const body=document.querySelector('.recording-body'),top=body?.scrollTop||0;render();const next=document.querySelector('.recording-body');if(next)next.scrollTop=top;}
+function openPhotoPicker(){const picker=document.getElementById('attachment-photo-picker');if(picker){picker.value='';picker.click();}renderModal();}
 async function shareRecording(kind){
  const file=FILES.find(item=>item.id===state.recordingId);if(!file)return;
  const transcript=transcriptFor(file).map(segment=>segment.text).join('\n\n');
@@ -907,35 +1117,52 @@ async function shareRecording(kind){
 function modal(){
  if(state.recordingId!==null || (!state.addOpen && !state.detail)) return '';
  let content='';
- if(state.addOpen){content=`<div class="add-device-content"><div class="searching-icon">${icon('bluetooth',30)}</div><h3>发现附近设备</h3><p>这里展示模拟设备，实际蓝牙搜索需接入 App 原生能力。</p><button class="discover-device" data-action="add-device">${icon('device',23)}<div><strong>Jeetoo AI Card 02</strong><span>可连接的演示设备</span></div>${icon('plus',22)}</button></div>`;}
+ if(state.addOpen){content=`<div class="add-device-content"><div class="searching-icon">${icon('bluetooth',30)}</div><h3>发现附近设备</h3><p>这里展示模拟设备，实际蓝牙搜索需接入 App 原生能力。</p><button class="discover-device" data-action="add-device">${icon('device',23)}<div><strong>JEETOO AI Card 02</strong><span>可连接的演示设备</span></div>${icon('plus',22)}</button></div>`;}
  else {const f=FILES.find(f=>f.id===state.detail); content=`<div class="detail-content"><h3 class="detail-title">${escapeHtml(f.title)}</h3><div class="detail-meta">${f.fullDate}<span>·</span>${f.duration}</div><div class="audio-player"><button class="play-button" data-action="play">${icon(state.playing?'pause':'play',20)}</button><div class="waveform">${[12,20,14,30,37,24,18,33,43,24,14,26,37,20,13,31,42,27,16,35,19,28,14,25,39,22,18,32,14,20].map(n=>`<i style="height:${n}px"></i>`).join('')}</div><span class="player-duration">${f.duration.slice(3)}</span></div><div class="detail-note">${f.ai?`${label()} <strong>已完成 AI 处理</strong><p>此处可接入真实的转写文本和智能总结内容。</p>`:'<strong>原始录音</strong><p>尚未进行 AI 转写或总结。</p>'}</div><button class="attachment-button" data-action="open-recording">打开录音详情</button></div>`;}
  return `<div class="sheet-root" data-action="backdrop"><section class="bottom-sheet" role="dialog" aria-modal="true"><div class="sheet-grabber"></div><div class="sheet-heading"><h2>${state.addOpen?'添加设备':'文件详情'}</h2><button class="icon-button" data-action="close" aria-label="关闭">${icon('close',21)}</button></div>${content}</section></div>`;
 }
 function renderModal(){
- document.getElementById('modal').innerHTML=modal()+(state.transferModalId!==null?transferModeView():'')+(state.connectingDevice?`<div class="connection-overlay" role="status" aria-live="polite"><div class="connection-card"><div class="connection-spinner"></div><strong>正在连接 ${escapeHtml(state.connectingDevice)}</strong><p>请稍候，正在建立设备连接…</p></div></div>`:'')+(state.deviceConfirm?`<div class="confirm-overlay"><section class="confirm-card" role="dialog" aria-modal="true"><h3>解绑此设备？</h3><p>解绑后，录音卡可以绑定到其他账号。</p><div class="dialog-actions"><button data-action="device-confirm-cancel">取消</button><button class="danger-confirm" data-action="device-confirm-accept">确认</button></div></section></div>`:'')+aiPanelView(); const transcript=document.getElementById('ai-panel-conversation');if(transcript)transcript.scrollTop=transcript.scrollHeight;
+ document.getElementById('modal').innerHTML=modal()+(state.transferModalId!==null?transferModeView():'')+(state.recordingId!==null&&state.detailTab==='attachments'?attachmentOverlaysView():'')+(state.connectingDevice?`<div class="connection-overlay" role="status" aria-live="polite"><div class="connection-spinner"></div><strong>正在连接 ${escapeHtml(deviceDisplayName(state.connectingDevice))}</strong><p>请稍候，正在建立设备连接…</p></div>`:'')+(state.deviceConfirm?`<div class="confirm-overlay"><section class="confirm-card" role="dialog" aria-modal="true"><h3>解绑此设备？</h3><p>解绑后，录音卡可以绑定到其他账号。</p><div class="dialog-actions"><button data-action="device-confirm-cancel">取消</button><button class="danger-confirm" data-action="device-confirm-accept">确认</button></div></section></div>`:'')+sideMenuView();
+ const overlayRoot=document.getElementById('ai-overlay-root');if(overlayRoot)overlayRoot.innerHTML=aiPanelView();
+ const transcript=document.getElementById('ai-panel-conversation');if(transcript)transcript.scrollTop=transcript.scrollHeight;
 }
 function render(preserveAiScroll=false){
  const currentAiMessages=document.getElementById('ai-full-messages');
  const savedAiScrollTop=preserveAiScroll&&currentAiMessages?currentAiMessages.scrollTop:null;
+ const content=document.getElementById('content'),savedContentScrollTop=content?.scrollTop||0;
  const recordingOpen=state.recordingId!==null;
  const fullScreenDevice=state.boundSuccess||state.firmwareStage==='updating'||state.firmwareStage==='done';
  document.querySelector('.app-shell').classList.toggle('recording-open',recordingOpen);
  document.querySelector('.app-shell').classList.toggle('card-editor-open',state.cardEditorOpen);
+ document.querySelector('.app-shell').classList.toggle('drawer-open',state.sidebarOpen);
+ if(state.sidebarOpen){document.body.classList.add('drawer-open');document.body.style.setProperty('--drawer-scroll-offset',`-${state.sidebarWindowScrollY}px`);}else{document.body.classList.remove('drawer-open');document.body.style.removeProperty('--drawer-scroll-offset');}
  document.getElementById('content').innerHTML=state.cardEditorOpen?badgeEditorView():state.recordingId!==null?recordingView():state.firmwareStage==='updating'||state.firmwareStage==='done'?firmwareFlowView():state.boundSuccess?bindingSuccessView():state.aboutPage?aboutView():state.accountPage?accountView():state.deviceDetail?deviceDetailView():state.tab==='files'?filesView():state.tab==='assistant'?assistantView():profileView();
- document.getElementById('bottom-nav').innerHTML=[['files','文件','folder'],['assistant','问AI','assistant'],['profile','个人中心','user']].map(([id,title,glyph])=>`<button class="nav-item ${!state.deviceDetail&&state.tab===id?'active':''}" data-action="tab" data-value="${id}" aria-current="${!state.deviceDetail&&state.tab===id?'page':'false'}">${icon(glyph,32,1.45)}<span>${title}</span></button>`).join('');
- document.getElementById('bottom-nav').hidden=recordingOpen||fullScreenDevice||state.aboutPage||state.accountPage||state.cardEditorOpen;
+ if(content){content.scrollTop=state.sidebarOpen?state.sidebarScrollTop:state.restoreSidebarScroll?state.sidebarScrollTop:savedContentScrollTop;state.restoreSidebarScroll=false;}
+ if(state.resetWindowScroll){window.scrollTo(0,0);state.resetWindowScroll=false;state.restoreWindowScroll=false;}else if(state.restoreWindowScroll){const y=state.sidebarWindowScrollY;state.restoreWindowScroll=false;requestAnimationFrame(()=>window.scrollTo(0,y));}
+ const homeEntry=document.getElementById('home-ai-entry');
+ const showHomeEntry=state.tab==='files'&&!recordingOpen&&!state.deviceDetail&&!fullScreenDevice&&!state.aboutPage&&!state.accountPage&&!state.cardEditorOpen;
+ if(homeEntry)homeEntry.innerHTML=showHomeEntry?homeAiEntryMarkup():'';
  renderModal();
  if(state.aiFullscreen){const transcript=document.getElementById('ai-full-messages');if(transcript)transcript.scrollTop=savedAiScrollTop===null?transcript.scrollHeight:savedAiScrollTop;}
 }
+document.addEventListener('focusin',(e)=>{
+ const form=e.target.closest?.('#home-ai-form,#recording-ai-form');
+ if(!form||state.aiPanelOpen)return;
+ openAiPanelFromComposer(form);
+});
 document.addEventListener('click',(e)=>{
- if(state.menu && !e.target.closest('.device-menu') && !e.target.closest('.current-device')){state.menu=false;if(!e.target.closest('[data-action]')){render();return;}}
- const b=e.target.closest('[data-action]'); if(!b) return;
+ if(state.menu && !e.target.closest('.device-menu') && !e.target.closest('.current-device,.device-chip')){state.menu=false;if(!e.target.closest('[data-action]')){render();return;}}
+ const b=e.target.closest('[data-action]'),hadNoteMenu=Boolean(state.noteMenuId);
+ const shouldCloseNoteMenu=state.noteMenuId&&!e.target.closest('.note-menu-pop')&&!e.target.closest('.note-more')&&!e.target.closest('.sheet-root')&&!e.target.closest('.confirm-overlay');
+ if(shouldCloseNoteMenu)state.noteMenuId=null;
+ if(hadNoteMenu&&shouldCloseNoteMenu&&b)renderRecordingKeepingScroll();
+ if(!b){if(hadNoteMenu){state.noteMenuId=null;renderRecordingKeepingScroll();}return;}
  let preserveAiScroll=false;
  const action=b.dataset.action, value=b.dataset.value;
  switch(action){
-  case 'open-ai-panel':clearTimeout(aiPanelTimer);aiPanelFromNav=false;state.aiPanelOpen=true;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelChatMode=false;state.aiPanelLoading=false;state.aiPanelMessages=[];state.aiPanelHint='';render();return;
+  case 'open-ai-panel':clearTimeout(aiPanelTimer);aiPanelFromNav=false;state.aiContext={scope:'recording',recordingId:state.recordingId};state.aiPanelOpen=true;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelChatMode=false;state.aiPanelLoading=false;state.aiPanelMessages=[];state.aiPanelHint='';renderModal();return;
   case 'assistant-ai-back':state.tab='files';aiHistoryOpen=false;aiHistoryDetail=null;break;
-  case 'close-ai-panel':clearTimeout(aiPanelTimer);aiPanelFromNav=false;state.aiPanelOpen=false;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelLoading=false;state.aiVoiceActive=false;state.aiPanelHint='';document.activeElement?.blur?.();render();return;
+  case 'close-ai-panel':clearTimeout(aiPanelTimer);aiPanelFromNav=false;state.aiPanelOpen=false;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelLoading=false;state.aiVoiceActive=false;state.aiPanelHint='';document.activeElement?.blur?.();renderModal();return;
   case 'ai-expand':state.aiPanelExpanded=!state.aiPanelExpanded;state.aiMoreOpen=false;state.aiPanelHint='';renderModal();return;
   case 'ai-return-panel':if(aiPanelFromNav){aiPanelFromNav=false;state.aiPanelOpen=false;state.aiPanelExpanded=false;state.aiPanelHint='';render();return;}state.aiPanelExpanded=false;state.aiFullscreen=false;state.aiMoreOpen=false;state.aiPanelHint='';renderModal();return;
   case 'ai-history-open':case 'ai-more-toggle':{const conversation=document.getElementById('ai-panel-conversation');aiHistoryReturnScrollTop=conversation?.scrollTop||0;aiHistoryOpen=true;aiHistoryDetail=null;aiHistoryNotice='';state.aiMoreOpen=false;if(state.tab==='assistant'&&!state.aiPanelOpen)render();else renderModal();return;}
@@ -949,13 +1176,13 @@ document.addEventListener('click',(e)=>{
   case 'ai-history-delete-confirm':aiHistoryRecords=aiHistoryRecords.filter(record=>record.id!==aiHistoryEditingId);aiHistoryEditingId=null;aiHistoryDialog=null;if(state.tab==='assistant'&&!state.aiPanelOpen)render();else renderModal();return;
   case 'ai-history-dialog-cancel':aiHistoryEditingId=null;aiHistoryDialog=null;if(state.tab==='assistant'&&!state.aiPanelOpen)render();else renderModal();return;
   case 'ai-history-dialog-backdrop':if(e.target!==b)return;aiHistoryEditingId=null;aiHistoryDialog=null;if(state.tab==='assistant'&&!state.aiPanelOpen)render();else renderModal();return;
-  case 'ai-history-new':aiHistoryOpen=false;aiHistoryDetail=null;aiHistorySearchOpen=false;aiHistoryMenuId=null;aiHistoryNotice='';state.aiPanelChatMode=true;state.aiPanelMessages=[];state.aiDraft='';state.aiPanelHint='';state.aiPanelLoading=false;state.aiPanelOpen=true;state.aiPanelExpanded=true;state.aiFullscreen=false;render();return;
+  case 'ai-history-new':aiHistoryOpen=false;aiHistoryDetail=null;aiHistorySearchOpen=false;aiHistoryMenuId=null;aiHistoryNotice='';state.aiContext={scope:'all',recordingId:null};state.aiPanelChatMode=true;state.aiPanelMessages=[];state.aiDraft='';state.aiPanelHint='';state.aiPanelLoading=false;state.aiPanelOpen=true;state.aiPanelExpanded=true;state.aiFullscreen=false;renderModal();return;
   case 'ai-more-info':state.aiMoreOpen=false;state.aiPanelHint='小步可以协助整理录音内容，也可以继续回答你的问题。';break;
   case 'ai-more-close':state.aiMoreOpen=false;break;
   case 'ai-open-related-recording':state.aiPanelOpen=false;state.aiFullscreen=false;state.recordingId=Number(value)||1;state.detailTab='transcript';state.playing=false;state.playSeconds=0;break;
   case 'recording-ai-shortcut':{
    const prompt={summary:'总结一下',todo:'这段录音里有哪些待办事项？',analysis:'请进一步分析这段录音'}[value]||'总结一下';
-   openAiPanelWithPrompt(prompt,value);return;
+   openAiPanelWithPrompt(prompt,value,{scope:'recording',recordingId:state.recordingId});return;
   }
   case 'ai-full-reply':{
    const key=value==='总结一下'?'summary':value==='有要办的吗'?'todo':'analysis';
@@ -966,7 +1193,7 @@ document.addEventListener('click',(e)=>{
   }
   case 'ai-insight-close':state.aiInsight=null;state.aiInsightLoading=false;state.aiInsightResult=null;clearTimeout(aiInsightTimer);preserveAiScroll=true;break;
   case 'ai-insight-backdrop':if(e.target!==b)return;state.aiInsight=null;state.aiInsightLoading=false;state.aiInsightResult=null;clearTimeout(aiInsightTimer);preserveAiScroll=true;break;
-  case 'ai-panel-backdrop':if(e.target===b){clearTimeout(aiPanelTimer);state.aiPanelOpen=false;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelLoading=false;state.aiVoiceActive=false;state.aiPanelHint='';render();}return;
+  case 'ai-panel-backdrop':if(e.target===b){clearTimeout(aiPanelTimer);state.aiPanelOpen=false;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelLoading=false;state.aiVoiceActive=false;state.aiPanelHint='';renderModal();}return;
   case 'ai-scan':state.aiPanelHint='扫描入口为前端演示，暂未连接扫描服务。';break;
   case 'ai-quick-prompt':{
    const localInsight={
@@ -977,14 +1204,31 @@ document.addEventListener('click',(e)=>{
    }[value];
    sendAiPanelMessage(value,localInsight||'summary');return;
   }
-  case 'ai-voice-toggle':state.aiVoiceActive=!state.aiVoiceActive;state.aiPanelHint=state.aiVoiceActive?'正在聆听…（语音交互演示）':'语音输入已结束（演示）';break;
+  case 'ai-voice-toggle':
+   if(!state.aiPanelOpen&&state.tab!=='assistant'){
+    state.aiContext=aiContextForComposer(b.closest('[data-ai-composer]'));
+    clearTimeout(aiPanelTimer);state.aiPanelMessages=[];state.aiPanelLoading=false;state.aiDraft='';
+    state.aiPanelOpen=true;state.aiPanelExpanded=false;state.aiFullscreen=false;state.aiPanelChatMode=true;state.aiVoiceActive=true;state.aiPanelHint='正在聆听…（语音交互演示）';aiHistoryOpen=false;aiHistoryDetail=null;renderModal();return;
+   }
+   state.aiVoiceActive=!state.aiVoiceActive;state.aiPanelHint=state.aiVoiceActive?'正在聆听…（语音交互演示）':'语音输入已结束（演示）';
+   if(!state.aiPanelOpen&&state.tab==='assistant'){render();return;}
+   renderModal();return;
+  case 'sidebar-open':openSidebar();return;
+  case 'sidebar-close':closeSidebarAnimated();return;
+  case 'sidebar-backdrop':if(e.target===b){closeSidebarAnimated();return;}else return;
+  case 'sidebar-dialog-close':state.profileDialog=null;break;
+  case 'sidebar-dialog-backdrop':if(e.target===b)state.profileDialog=null;else return;break;
+  case 'search-open':state.searchOpen=true;state.menu=false;render();document.getElementById('home-search-input')?.focus();return;
+  case 'search-close':state.searchOpen=false;state.searchQuery='';render();return;
+  case 'search-submit':e.preventDefault();return;
   case 'menu': state.menu=!state.menu; state.sortOpen=false;break;
   case 'select-device': state.menu=false;state.deviceDetailName=value;state.deviceDetail=true;break;
   case 'open-add': state.addOpen=true;state.menu=false;break;
-  case 'add-device': if(!state.devices.includes('Jeetoo AI Card 02'))state.devices.push('Jeetoo AI Card 02');state.batteryLevels['Jeetoo AI Card 02']=100;state.addOpen=false;state.menu=true;break;
+  case 'add-device': if(!state.devices.includes('JEETOO AI Card 02'))state.devices.push('JEETOO AI Card 02');state.batteryLevels['JEETOO AI Card 02']=100;state.addOpen=false;state.menu=true;break;
   case 'sort':state.sortOpen=!state.sortOpen;break;
   case 'sort-newest':state.sortMode='newest';state.sortOpen=false;break;
   case 'sort-oldest':state.sortMode='oldest';state.sortOpen=false;break;
+  case 'quick-transfer':showRecordingToast('正在快速传输录音（演示）');break;
   case 'transfer-open':state.transferModalId=Number(value);break;
   case 'transfer-close':state.transferModalId=null;break;
   case 'transfer-backdrop':if(e.target===b)state.transferModalId=null;else return;break;
@@ -1008,33 +1252,56 @@ document.addEventListener('click',(e)=>{
   case 'unbind-mode':state.unbindMode=value;break;
   case 'confirm-unbind-choice':if(state.unbindMode==='disconnect'){state.deviceDialog=null;state.deviceDetail=false;state.deviceDetailName=null;}else{state.deviceDialog=null;state.deviceConfirm=true;}break;
   case 'device-confirm-cancel':state.deviceConfirm=false;state.deviceDialog='unbind-options';break;
-  case 'device-confirm-accept':{state.deviceConfirm=false;const target=state.deviceDetailName||state.device;state.devices=state.devices.filter(name=>name!==target);delete state.batteryLevels[target];if(target===state.device){state.device=state.devices[0]||'Jeetoo AI Card';}state.deviceDetail=false;state.deviceDetailName=null;state.boundSuccess=true;break;}
+  case 'device-confirm-accept':{state.deviceConfirm=false;const target=state.deviceDetailName||state.device;state.devices=state.devices.filter(name=>name!==target);delete state.batteryLevels[target];if(target===state.device){state.device=state.devices[0]||'JEETOO AI Card';}state.deviceDetail=false;state.deviceDetailName=null;state.boundSuccess=true;break;}
   case 'success-close':case 'success-start':state.boundSuccess=false;state.deviceDetail=false;state.deviceDialog=null;state.tab='files';break;
   case 'device-dialog-close':state.deviceDialog=null;break;
   case 'device-backdrop':if(e.target===b)state.deviceDialog=null;else return;break;
   case 'toggle-nfc':state.deviceSettings.nfc=!state.deviceSettings.nfc;state.deviceDialog=null;break;
   case 'confirm-device-action':if(state.deviceDialog==='reset-confirm'){state.deviceSettings.nfc=true;state.deviceSettings.sleep='30 分钟';state.deviceSettings.firmware='2.0.0';}state.deviceDialog=null;break;
-  case 'open-file':state.fileMenu=null;state.fileDialog=null;state.fileRenameId=null;state.recordingId=Number(value);state.detail=null;state.addOpen=false;state.detailTab='transcript';state.playing=false;state.playSeconds=0;state.noteDraft='';state.outlineCollapsed=false;state.previewPhoto=null;break;
+  case 'open-file':state.fileMenu=null;state.fileDialog=null;state.fileRenameId=null;state.aiDraft='';state.recordingId=Number(value);state.detail=null;state.addOpen=false;state.detailTab='transcript';state.playing=false;state.playSeconds=0;state.noteDraft='';state.outlineCollapsed=false;state.previewPhoto=null;break;
   case 'file-context-backdrop':if(e.target===b){state.fileMenu=null;state.fileDialog=null;state.fileRenameId=null;}else return;break;
   case 'file-context-rename':state.fileRenameId=Number(value);state.fileDialog='rename';state.fileMenu=null;break;
   case 'file-context-delete':state.fileRenameId=Number(value);state.fileDialog='delete';state.fileMenu=null;break;
   case 'file-dialog-cancel':state.fileDialog=null;state.fileRenameId=null;state.fileRenameDraft='';break;
   case 'file-dialog-backdrop':if(e.target===b){state.fileDialog=null;state.fileRenameId=null;state.fileRenameDraft='';}else return;break;
   case 'file-delete-confirm':{const id=state.fileRenameId,index=FILES.findIndex(item=>item.id===id);if(index>=0){FILES.splice(index,1);delete state.notes[id];delete state.photos[id];}state.fileDialog=null;state.fileRenameId=null;state.fileRenameDraft='';render();return;}
-  case 'detail-tab':state.detailTab=value;state.voiceActive=false;break;
-  case 'close-recording':state.recordingId=null;state.detail=null;state.playing=false;state.voiceActive=false;state.recordingActionsOpen=false;state.recordingDialog=null;clearInterval(playbackTimer);break;
+  case 'detail-tab':state.detailTab=value;state.voiceActive=false;if(value!=='attachments'){state.noteEditorOpen=false;state.noteEditingId=null;state.noteDeleteId=null;state.photoActionId=null;state.photoDeleteId=null;state.previewPhoto=null;}break;
+  case 'close-recording':state.recordingId=null;state.aiDraft='';state.detail=null;state.playing=false;state.voiceActive=false;state.recordingActionsOpen=false;state.recordingDialog=null;state.noteEditorOpen=false;state.noteEditingId=null;state.noteDeleteId=null;state.photoActionId=null;state.photoDeleteId=null;state.previewPhoto=null;clearInterval(playbackTimer);break;
   case 'open-recording':state.recordingId=state.detail;state.detailTab='transcript';state.detail=null;break;
   case 'recording-play':case 'play':state.playing=!state.playing;if(state.playing){const file=FILES.find(item=>item.id===(state.recordingId??state.detail));const total=Number(file?.duration.split(':').pop())||21;clearInterval(playbackTimer);playbackTimer=window.setInterval(()=>{state.playSeconds++;if(state.playSeconds>=total){state.playSeconds=0;state.playing=false;clearInterval(playbackTimer);}render();},Math.max(180,1000/state.playbackRate));}else clearInterval(playbackTimer);break;
   case 'playback-rate':state.playbackRate=state.playbackRate>=2?1:state.playbackRate+.25;if(state.playing){clearInterval(playbackTimer);state.playing=false;}break;
   case 'outline-toggle':state.outlineCollapsed=!state.outlineCollapsed;break;
   case 'voice-toggle':state.voiceActive=!state.voiceActive;showRecordingToast(state.voiceActive?'语音输入演示中…':'已结束语音输入演示');render();return;
-  case 'add-attachment':showRecordingToast('附件添加仅作前端演示');break;
-  case 'attachment-info':showRecordingToast('这里可以添加白板、投屏或名片照片');break;
-  case 'add-photo':{const file=FILES.find(item=>item.id===(state.recordingId??state.detail));state.photos[file.id]=(state.photos[file.id]||0)+1;showRecordingToast('演示照片已添加');break;}
-  case 'preview-photo':state.previewPhoto=value;break;
-  case 'close-photo':state.previewPhoto=null;break;
-  case 'focus-note':document.getElementById('note-input')?.focus();return;
-  case 'save-note':{const file=FILES.find(item=>item.id===(state.recordingId??state.detail));const note=document.getElementById('note-input')?.value.trim()||'';state.noteDraft=note;if(note)state.notes[file.id]=note;else delete state.notes[file.id];showRecordingToast(note?'备注已保存在本地':'备注已清空');break;}
+  case 'add-photo':openPhotoPicker();return;
+  case 'note-add':state.noteEditorOpen=true;state.noteEditingId=null;state.noteDraft='';state.noteMenuId=null;renderRecordingKeepingScroll();return;
+  case 'note-editor-cancel':state.noteEditorOpen=false;state.noteEditingId=null;state.noteDraft='';renderModal();return;
+  case 'note-editor-backdrop':if(e.target!==b)return;state.noteEditorOpen=false;state.noteEditingId=null;state.noteDraft='';renderModal();return;
+  case 'note-save':{
+   const text=state.noteDraft.trim(),fileId=state.recordingId;if(!text)return;
+   const list=noteEntries(fileId);if(state.noteEditingId){const current=list.find(note=>note.id===state.noteEditingId);if(current)current.text=text;}
+   else list.unshift({id:`note-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,text,createdAt:Date.now()});
+   state.notes[fileId]=list;state.noteEditorOpen=false;state.noteEditingId=null;state.noteDraft='';state.noteMenuId=null;showRecordingToast('备注已保存');renderRecordingKeepingScroll();return;
+  }
+  case 'note-menu-toggle':state.noteMenuId=state.noteMenuId===value?null:value;renderRecordingKeepingScroll();return;
+  case 'note-edit':{
+   const note=noteEntries(state.recordingId).find(item=>item.id===value);if(!note)return;
+   state.noteMenuId=null;state.noteEditingId=note.id;state.noteDraft=note.text;state.noteEditorOpen=true;renderRecordingKeepingScroll();renderModal();return;
+  }
+  case 'note-delete':state.noteMenuId=null;state.noteDeleteId=value;renderRecordingKeepingScroll();return;
+  case 'note-delete-cancel':state.noteDeleteId=null;renderRecordingKeepingScroll();return;
+  case 'note-delete-backdrop':if(e.target!==b)return;state.noteDeleteId=null;renderRecordingKeepingScroll();return;
+  case 'note-delete-confirm':{
+   const list=noteEntries(state.recordingId).filter(note=>note.id!==state.noteDeleteId);state.notes[state.recordingId]=list;state.noteDeleteId=null;state.noteMenuId=null;showRecordingToast('备注已删除');renderRecordingKeepingScroll();return;
+  }
+  case 'preview-photo':state.previewPhoto=value;renderModal();return;
+  case 'close-photo':state.previewPhoto=null;renderModal();return;
+  case 'photo-preview-backdrop':if(e.target!==b)return;state.previewPhoto=null;renderModal();return;
+  case 'photo-action-close':state.photoActionId=null;renderModal();return;
+  case 'photo-action-backdrop':if(e.target!==b)return;state.photoActionId=null;renderModal();return;
+  case 'photo-delete':state.photoActionId=null;state.photoDeleteId=value;renderModal();return;
+  case 'photo-delete-cancel':state.photoDeleteId=null;renderModal();return;
+  case 'photo-delete-backdrop':if(e.target!==b)return;state.photoDeleteId=null;renderModal();return;
+  case 'photo-delete-confirm':{const list=photoEntries(state.recordingId).filter(photo=>photo.id!==state.photoDeleteId);state.photos[state.recordingId]=list;state.photoDeleteId=null;state.photoActionId=null;showRecordingToast('照片已删除');renderRecordingKeepingScroll();return;}
   case 'recording-more':state.recordingActionsOpen=true;state.recordingDialog=null;state.recordingDraftTitle='';break;
   case 'recording-ops-close':state.recordingActionsOpen=false;state.recordingDialog=null;break;
   case 'recording-ops-backdrop':if(e.target===b){state.recordingActionsOpen=false;state.recordingDialog=null;}else return;break;
@@ -1047,20 +1314,20 @@ document.addEventListener('click',(e)=>{
   case 'recording-delete-cancel':state.recordingDialog=null;break;
   case 'recording-delete-backdrop':if(e.target===b)state.recordingDialog=null;else return;break;
   case 'recording-delete-confirm':{const index=FILES.findIndex(item=>item.id===state.recordingId);if(index>=0)FILES.splice(index,1);state.recordingId=null;state.recordingActionsOpen=false;state.recordingDialog=null;state.playing=false;clearInterval(playbackTimer);render();showRecordingToast('录音已删除');return;}
-  case 'tab':state.tab=value;state.deviceDetail=false;state.deviceReturnToProfile=false;state.menu=false;state.sortOpen=false;aiPanelFromNav=false;aiHistoryOpen=false;aiHistoryDetail=null;state.aiPanelOpen=false;state.aiPanelExpanded=false;if(value==='assistant'){state.aiFullscreen=false;state.aiPanelChatMode=false;state.aiPanelHint='';state.aiVoiceActive=false;}break;
-  case 'profile-edit':state.accountPage=true;state.profileDialog=null;break;
-  case 'profile-item':if(value==='card'){state.profileDialog=null;state.cardEditorOpen=true;}else if(value==='about'){state.profileDialog=null;state.aboutPage=true;state.aboutDetail=null;state.aboutUpdateChecked=false;}else state.profileDialog=value;break;
-  case 'about-back':if(state.aboutDetail)state.aboutDetail=null;else{state.aboutPage=false;state.aboutDetail=null;}break;
+  case 'tab':if(value==='profile'){openSidebar();return;}state.tab=value;state.deviceDetail=false;state.deviceReturnToProfile=false;state.menu=false;state.sortOpen=false;state.searchOpen=false;state.searchQuery='';aiPanelFromNav=false;aiHistoryOpen=false;aiHistoryDetail=null;state.aiPanelOpen=false;state.aiPanelExpanded=false;if(value==='assistant'){state.aiContext={scope:'all',recordingId:null};state.aiFullscreen=false;state.aiPanelChatMode=false;state.aiPanelHint='';state.aiVoiceActive=false;}break;
+  case 'profile-edit':state.sidebarOpen=false;state.sidebarClosing=false;state.accountPage=true;state.profileDialog=null;state.resetWindowScroll=true;break;
+  case 'profile-item':if(value==='card'){state.profileDialog=null;state.sidebarOpen=false;state.cardEditorOpen=true;state.resetWindowScroll=true;}else if(value==='about'){state.profileDialog=null;state.sidebarOpen=false;state.aboutPage=true;state.aboutDetail=null;state.aboutUpdateChecked=false;state.resetWindowScroll=true;}else state.profileDialog=value;break;
+  case 'about-back':if(state.aboutDetail)state.aboutDetail=null;else{state.aboutPage=false;state.aboutDetail=null;state.restoreSidebarScroll=true;state.restoreWindowScroll=true;}break;
   case 'about-open-detail':state.aboutDetail=value;break;
   case 'about-check-update':state.aboutUpdateChecked=true;break;
   case 'profile-toggle':if(value==='noise')state.profile.noiseReduction=!state.profile.noiseReduction;else state.profile.notifications=!state.profile.notifications;break;
   case 'profile-choice':state.profile[b.dataset.key]=value;state.profileDialog=null;break;
   case 'profile-open-device':state.profileDialog=null;state.deviceDetail=true;state.deviceReturnToProfile=true;break;
   case 'profile-logout':state.profileDialog='logout';break;
-  case 'profile-logout-confirm':state.profileDialog=null;state.tab='files';state.deviceDetail=false;showRecordingToast('已退出演示账号');break;
+  case 'profile-logout-confirm':state.profileDialog=null;state.sidebarOpen=false;state.sidebarClosing=false;state.tab='files';state.deviceDetail=false;state.restoreSidebarScroll=true;state.restoreWindowScroll=true;showRecordingToast('已退出演示账号');break;
   case 'profile-close':state.profileDialog=null;break;
   case 'profile-backdrop':if(e.target===b)state.profileDialog=null;else return;break;
-  case 'account-back':state.accountPage=false;state.accountDialog=null;break;
+  case 'account-back':state.accountPage=false;state.accountDialog=null;state.restoreSidebarScroll=true;state.restoreWindowScroll=true;break;
   case 'account-profile-edit':state.accountDialog='profile';break;
   case 'account-edit':state.accountDialog=value;break;
   case 'account-close':state.accountDialog=null;break;
@@ -1072,7 +1339,23 @@ document.addEventListener('click',(e)=>{
  }
  render(preserveAiScroll);
 });
+document.addEventListener('input',(e)=>{
+ if(e.target?.id!=='home-search-input')return;
+ state.searchQuery=e.target.value;
+ const query=state.searchQuery.trim().toLocaleLowerCase(),items=[...document.querySelectorAll('.file-card[data-search-title],.transfer-card[data-search-title]')];
+ let visible=0;
+ items.forEach(item=>{const show=!query||item.dataset.searchTitle.includes(query);item.hidden=!show;if(show)visible++;});
+ document.querySelectorAll('.recording-day-group').forEach(group=>{group.hidden=!group.querySelector('.file-card:not([hidden])');});
+ let empty=document.getElementById('file-search-empty');
+ if(!visible&&query){if(!empty){empty=document.createElement('p');empty.id='file-search-empty';empty.className='empty-note';empty.textContent=state.profile.language==='English'?'No matching recordings':state.profile.language==='日本語'?'一致する録音はありません':'没有找到匹配的录音';document.querySelector('.file-list')?.append(empty);}}
+ else empty?.remove();
+});
+document.addEventListener('submit',(e)=>{if(e.target?.matches('.home-search-form'))e.preventDefault();});
 let transferSheetStartY=null;
+let sidebarGestureStart=null;
+document.addEventListener('pointerdown',(e)=>{sidebarGestureStart=e.target.closest?.('.side-drawer')?{x:e.clientX,y:e.clientY}:null;},{passive:true});
+document.addEventListener('pointerup',(e)=>{if(sidebarGestureStart&&sidebarGestureStart.x-e.clientX>70&&Math.abs(sidebarGestureStart.y-e.clientY)<90)closeSidebarAnimated();sidebarGestureStart=null;},{passive:true});
+document.addEventListener('pointercancel',()=>{sidebarGestureStart=null;},{passive:true});
 document.addEventListener('pointerdown',(e)=>{transferSheetStartY=e.target.closest?.('.transfer-sheet')?e.clientY:null;},{passive:true});
 document.addEventListener('pointerup',(e)=>{if(transferSheetStartY!==null&&e.clientY-transferSheetStartY>72&&state.transferModalId!==null){state.transferModalId=null;render();}transferSheetStartY=null;},{passive:true});
 document.addEventListener('pointercancel',()=>{transferSheetStartY=null;},{passive:true});
@@ -1084,6 +1367,16 @@ window.addEventListener('message',(e)=>{
  }
 });
 document.addEventListener('submit',(e)=>{
+ if(e.target.matches('[data-ai-composer]')){
+  e.preventDefault();const input=e.target.querySelector('.ai-composer-input'),value=String(input?.value||'').trim();if(!value)return;
+  if(state.aiPanelLoading)return;
+  const context=aiContextForComposer(e.target);state.aiContext=context;
+  if(!state.aiPanelOpen){clearTimeout(aiPanelTimer);state.aiPanelMessages=[];state.aiPanelLoading=false;}
+  state.aiDraft='';state.aiPanelExpanded=false;state.aiFullscreen=false;state.aiPanelHint='';state.aiVoiceActive=false;aiHistoryOpen=false;aiHistoryDetail=null;
+  input.value='';const composer=e.target;const mic=composer.querySelector('.ai-voice-button'),send=composer.querySelector('.ai-send-button');if(mic)mic.hidden=false;if(send)send.hidden=true;input?.blur();
+  sendAiPanelMessage(value,undefined,context);
+  requestAnimationFrame(()=>document.querySelector(state.aiPanelOpen?'.ai-panel .ai-composer-input':'.assistant-ai-screen .ai-composer-input')?.focus());return;
+ }
  if(e.target.id==='file-rename-form'){
   e.preventDefault();const input=e.target.elements.namedItem('title'),title=String(input?.value||'').trim(),record=FILES.find(item=>item.id===state.fileRenameId);
   if(!title){input?.setCustomValidity('名称不能为空');input?.reportValidity();return;}
@@ -1098,9 +1391,6 @@ document.addEventListener('submit',(e)=>{
   const record=aiHistoryRecords.find(item=>item.id===aiHistoryEditingId);if(record)record.title=title;
   aiHistoryEditingId=null;aiHistoryDialog=null;if(state.tab==='assistant'&&!state.aiPanelOpen)render();else renderModal();return;
  }
- if(e.target.id==='ai-chat-form'){
-  e.preventDefault();const input=document.getElementById('ai-chat-input');sendAiPanelMessage(input?.value);return;
- }
  if(e.target.id==='account-profile-form'){
   e.preventDefault();const form=new FormData(e.target);state.profile.name=String(form.get('name')||state.profile.name).trim();state.accountDialog=null;render();return;
  }
@@ -1114,41 +1404,45 @@ document.addEventListener('submit',(e)=>{
  if(e.target.id==='profile-edit-form'){
   e.preventDefault();const form=new FormData(e.target);state.profile.name=String(form.get('name')||state.profile.name).trim();state.profile.role=String(form.get('role')||state.profile.role).trim();state.profileDialog=null;render();return;
  }
- if(e.target.id==='recording-form'){
-  e.preventDefault();const input=document.getElementById('recording-input');const value=input?.value.trim();if(!value)return;
-  openAiPanelWithPrompt(value);return;
- }
  if(e.target.id!=='chat-form')return;
  e.preventDefault();const input=document.getElementById('chat-input');const value=input?.value.trim();if(!value)return;
  state.messages.push({role:'user',text:value},{role:'assistant',text:'这是前端演示页面。接入 AI 服务后，我就可以结合你的录音文件进行回答。'});render();
 });
 document.addEventListener('input',(e)=>{
  if(e.target.form?.id==='file-rename-form'&&e.target.name==='title')e.target.setCustomValidity('');
- if(e.target.id==='note-input')state.noteDraft=e.target.value;
- if(e.target.id==='ai-chat-input'){
-  state.aiDraft=e.target.value;
+ if(e.target.id==='note-editor-text'){state.noteDraft=e.target.value;const save=document.querySelector('[data-action="note-save"]');if(save)save.disabled=!state.noteDraft.trim();}
+ if(e.target.matches('.ai-composer-input')){
+  state.aiDraft=e.target.value;const form=e.target.form,hasText=Boolean(e.target.value.trim());const mic=form?.querySelector('.ai-voice-button'),send=form?.querySelector('.ai-send-button');if(mic)mic.hidden=hasText;if(send)send.hidden=!hasText;
  }
 });
+document.addEventListener('change',async(e)=>{
+ if(e.target.id!=='attachment-photo-picker')return;
+ const selected=[...(e.target.files||[])],fileId=state.recordingId;if(!selected.length||fileId===null)return;
+ const loaded=await Promise.all(selected.map(file=>new Promise(resolve=>{const reader=new FileReader();reader.onload=()=>resolve({id:`photo-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,name:file.name,src:typeof reader.result==='string'?reader.result:'',createdAt:Date.now()});reader.onerror=()=>resolve(null);reader.readAsDataURL(file);}))) ;
+ const photos=photoEntries(fileId);state.photos[fileId]=[...loaded.filter(Boolean),...photos];e.target.value='';showRecordingToast(`${loaded.filter(Boolean).length} 张照片已添加`);renderRecordingKeepingScroll();
+});
 document.addEventListener('pointerdown',(e)=>{
+ if(e.target.matches('.ai-composer-input')){
+  aiPressTriggered=false;clearTimeout(aiPressTimer);
+  aiPressTimer=window.setTimeout(()=>{aiPressTriggered=true;state.aiContext=aiContextForComposer(e.target.form);if(!state.aiPanelOpen){clearTimeout(aiPanelTimer);state.aiPanelMessages=[];state.aiPanelLoading=false;}e.target.blur();aiHistoryOpen=false;aiHistoryDetail=null;state.aiPanelOpen=true;state.aiPanelExpanded=false;state.aiFullscreen=false;state.aiPanelChatMode=true;state.aiVoiceActive=true;state.aiPanelHint='正在聆听…（松开结束）';renderModal();},520);
+  return;
+ }
  if(!state.aiPanelOpen)return;
  if(e.target.closest('[data-ai-drag-handle]')){aiDragStart=e.clientY;return;}
- if(e.target.id==='ai-chat-input'){
-  aiPressTriggered=false;clearTimeout(aiPressTimer);
-  aiPressTimer=window.setTimeout(()=>{aiPressTriggered=true;state.aiVoiceActive=true;state.aiPanelHint='正在聆听…（松开结束）';e.target.blur();render();},520);
- }
 });
 document.addEventListener('pointermove',(e)=>{
  if(aiDragStart!==null){const delta=e.clientY-aiDragStart;const panel=document.querySelector('.ai-panel');if(panel&&delta>0)panel.style.transform=`translateY(${Math.min(delta,220)}px)`;}
 });
 document.addEventListener('pointerup',(e)=>{
- if(aiDragStart!==null){const delta=e.clientY-aiDragStart;aiDragStart=null;if(delta>75){clearTimeout(aiPanelTimer);state.aiPanelOpen=false;state.aiPanelExpanded=false;state.aiPanelLoading=false;state.aiVoiceActive=false;state.aiPanelHint='';render();}else{const panel=document.querySelector('.ai-panel');if(panel)panel.style.transform='';}}
+ if(aiDragStart!==null){const delta=e.clientY-aiDragStart;aiDragStart=null;if(delta>75){clearTimeout(aiPanelTimer);state.aiPanelOpen=false;state.aiPanelExpanded=false;state.aiPanelLoading=false;state.aiVoiceActive=false;state.aiPanelHint='';renderModal();}else{const panel=document.querySelector('.ai-panel');if(panel)panel.style.transform='';}}
  if(aiPressTimer){clearTimeout(aiPressTimer);aiPressTimer=null;}
- if(aiPressTriggered){aiPressTriggered=false;state.aiVoiceActive=false;state.aiPanelHint='语音输入已结束（演示）。';render();}
+ if(aiPressTriggered){aiPressTriggered=false;state.aiVoiceActive=false;state.aiPanelHint='语音输入已结束（演示）。';renderModal();}
 });
-document.addEventListener('pointercancel',()=>{aiDragStart=null;clearTimeout(aiPressTimer);aiPressTimer=null;if(aiPressTriggered){aiPressTriggered=false;state.aiVoiceActive=false;state.aiPanelHint='语音输入已结束（演示）。';render();}});
+document.addEventListener('pointercancel',()=>{aiDragStart=null;clearTimeout(aiPressTimer);aiPressTimer=null;if(aiPressTriggered){aiPressTriggered=false;state.aiVoiceActive=false;state.aiPanelHint='语音输入已结束（演示）。';renderModal();}});
 function syncAiKeyboardViewport(){
  const vv=window.visualViewport,raw=vv?Math.max(0,window.innerHeight-vv.height-vv.offsetTop):0;
  const inset=raw>120?Math.round(raw):0,shell=document.querySelector('.app-shell');
+ document.documentElement.style.setProperty('--ai-keyboard-inset',`${inset}px`);
  shell?.style.setProperty('--ai-keyboard-inset',`${inset}px`);
  shell?.classList.toggle('ai-keyboard-open',inset>0);
 }
@@ -1158,7 +1452,7 @@ syncAiKeyboardViewport();
 document.addEventListener('keydown',(e)=>{
  if(e.key==='Escape'&&state.aiInsight){state.aiInsight=null;state.aiInsightLoading=false;state.aiInsightResult=null;clearTimeout(aiInsightTimer);render(true);return;}
  if(e.key==='Escape'&&aiHistoryOpen){const inlineAssistant=state.tab==='assistant'&&!state.aiPanelOpen;if(aiHistoryDetail){aiHistoryDetail=null;if(inlineAssistant)render();else renderModal();}else{aiHistoryOpen=false;aiHistoryNotice='';if(inlineAssistant)render();else renderModal();const conversation=document.getElementById('ai-panel-conversation');if(conversation)conversation.scrollTop=aiHistoryReturnScrollTop;}return;}
- if(e.key==='Escape'&&state.aiPanelOpen){clearTimeout(aiPanelTimer);state.aiPanelOpen=false;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelLoading=false;state.aiVoiceActive=false;render();return;}
+ if(e.key==='Escape'&&state.aiPanelOpen){clearTimeout(aiPanelTimer);state.aiPanelOpen=false;state.aiFullscreen=false;state.aiPanelExpanded=false;state.aiPanelLoading=false;state.aiVoiceActive=false;renderModal();return;}
  const card=e.target.closest('.profile-card[role="button"]');
  if(card&&e.target===card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();state.accountPage=true;render();}
 });
